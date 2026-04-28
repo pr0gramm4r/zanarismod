@@ -22,6 +22,7 @@ public data class CharacterAccountData(
     val coordZ: Int,
     val coordLevel: Int,
     val varps: Map<Int, Int>,
+    val accountCreatedAt: LocalDateTime?,
     val createdAt: LocalDateTime?,
     val lastLogin: LocalDateTime?,
     val lastLogout: LocalDateTime?,
@@ -29,6 +30,7 @@ public data class CharacterAccountData(
     val bannedUntil: LocalDateTime?,
     val runEnergy: Int,
     val xpRate: Double,
+    val totalPlayTimeSeconds: Long,
 ) : CharacterDataStage.Segment {
     // Do not include sensitive fields (e.g., password hash, 2fa secret, known device).
     override fun toString(): String =
@@ -47,11 +49,13 @@ public data class CharacterAccountData(
             "coordX=$coordX, " +
             "coordZ=$coordZ, " +
             "coordLevel=$coordLevel, " +
+            "accountCreatedAt=$accountCreatedAt, " +
             "createdAt=$createdAt, " +
             "lastLogin=$lastLogin, " +
             "lastLogout=$lastLogout, " +
             "mutedUntil=$mutedUntil, " +
             "bannedUntil=$bannedUntil, " +
-            "xpRate=$xpRate" +
+            "xpRate=$xpRate, " +
+            "totalPlayTimeSeconds=$totalPlayTimeSeconds" +
             ")"
 }

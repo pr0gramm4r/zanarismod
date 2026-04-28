@@ -1,11 +1,14 @@
 package org.rsmod.content.areas.city.lumbridge.npcs
 
+import java.time.Duration
+import java.time.LocalDateTime
 import org.rsmod.api.player.dialogue.Dialogue
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.script.onOpNpc1
 import org.rsmod.api.script.onOpNpc3
 import org.rsmod.content.areas.city.lumbridge.configs.lumbridge_npcs
 import org.rsmod.game.entity.Npc
+import org.rsmod.game.entity.Player
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
 
@@ -72,11 +75,52 @@ class Hans : PluginScript() {
         startDialogue(npc) { playtimeDialogue() }
 
     private suspend fun Dialogue.playtimeDialogue() {
-        // TODO(content): playtime
+        val now = LocalDateTime.now()
+        val playtime = HansPlaytime.formatPlaytime(access.player, now)
+        val accountAge = HansPlaytime.accountAgeInDays(access.player, now)
         chatNpc(
             happy,
-            "You've spent 0 days, 0 hours, 0 minutes in the " +
-                "world since you arrived 0 days ago.",
+            "You've spent $playtime in the world since you arrived " +
+                "$accountAge ${"day".plural(accountAge)} ago.",
         )
     }
 }
+
+internal object HansPlaytime {
+    fun formatPlaytime(player: Player, now: LocalDateTime): String {
+        val seconds = player.totalPlayTimeSeconds + player.currentSessionSeconds(now)
+        return formatDuration(seconds)
+    }
+
+    fun accountAgeInDays(player: Player, now: LocalDateTime): Long {
+        val createdAt = player.accountCreatedAt ?: player.lastLogin
+        return Duration.between(createdAt, now).toDays().coerceAtLeast(0)
+    }
+
+    private fun Player.currentSessionSeconds(now: LocalDateTime): Long =
+        Duration.between(lastLogin, now).seconds.coerceAtLeast(0)
+
+    private fun formatDuration(totalSeconds: Long): String {
+        val totalMinutes = totalSeconds.coerceAtLeast(0) / 60
+        val days = totalMinutes / MINUTES_PER_DAY
+        val hours = (totalMinutes % MINUTES_PER_DAY) / MINUTES_PER_HOUR
+        val minutes = totalMinutes % MINUTES_PER_HOUR
+        val parts = buildList {
+            if (days > 0) {
+                add("$days ${"day".plural(days)}")
+            }
+            if (hours > 0) {
+                add("$hours ${"hour".plural(hours)}")
+            }
+            if (minutes > 0 || isEmpty()) {
+                add("$minutes ${"minute".plural(minutes)}")
+            }
+        }
+        return parts.joinToString()
+    }
+
+    private const val MINUTES_PER_HOUR = 60
+    private const val MINUTES_PER_DAY = 24 * MINUTES_PER_HOUR
+}
+
+private fun String.plural(count: Long): String = if (count == 1L) this else "${this}s"

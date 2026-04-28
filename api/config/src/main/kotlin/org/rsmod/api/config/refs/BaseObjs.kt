@@ -381,6 +381,12 @@ object BaseObjs : ObjReferences() {
     val crystal_axe = find("crystal_axe")
 
     val bronze_pickaxe = find("bronze_pickaxe")
+    val iron_pickaxe = find("iron_pickaxe")
+    val steel_pickaxe = find("steel_pickaxe")
+    val black_pickaxe = find("black_pickaxe")
+    val mithril_pickaxe = find("mithril_pickaxe")
+    val adamant_pickaxe = find("adamant_pickaxe")
+    val rune_pickaxe = find("rune_pickaxe")
     val dragon_pickaxe = find("dragon_pickaxe")
     val dragon_pickaxe_upgraded = find("dragon_pickaxe_pretty")
     val dragon_pickaxe_or_trailblazer = find("trailblazer_pickaxe_no_infernal")

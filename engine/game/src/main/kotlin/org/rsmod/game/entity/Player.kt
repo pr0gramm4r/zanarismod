@@ -212,6 +212,8 @@ public class Player(
     public lateinit var inv: Inventory
     public lateinit var worn: Inventory
 
+    public var accountCreatedAt: LocalDateTime? = null
+    public var totalPlayTimeSeconds: Long = 0
     public var lastLogin: LocalDateTime = LocalDateTime.now()
 
     /*

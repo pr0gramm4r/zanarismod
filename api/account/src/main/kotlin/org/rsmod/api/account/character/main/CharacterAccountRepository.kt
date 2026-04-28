@@ -3,6 +3,8 @@ package org.rsmod.api.account.character.main
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.inject.Inject
 import java.sql.Statement
+import java.time.Duration
+import java.time.LocalDateTime
 import kotlin.math.roundToInt
 import org.rsmod.api.account.character.CharacterMetadataList
 import org.rsmod.api.db.DatabaseConnection
@@ -121,6 +123,7 @@ constructor(
                         a.twofa_secret,
                         a.twofa_last_verified,
                         a.known_device,
+                        a.created_at AS account_created_at,
                         c.id AS character_id,
                         c.world_id,
                         c.x,
@@ -133,7 +136,8 @@ constructor(
                         c.muted_until,
                         c.banned_until,
                         c.run_energy,
-                        c.xp_rate_in_hundreds
+                        c.xp_rate_in_hundreds,
+                        c.total_play_time_seconds
                     FROM accounts a
                     JOIN characters c ON c.account_id = a.id
                     WHERE c.realm_id = ?
@@ -159,6 +163,7 @@ constructor(
                     val twofaSecret = resultSet.getString("twofa_secret")
                     val twofaLastVerified = resultSet.getLocalDateTime("twofa_last_verified")
                     val device = resultSet.getIntOrNull("known_device")
+                    val accountCreatedAt = resultSet.getLocalDateTime("account_created_at")
                     val worldId = resultSet.getIntOrNull("world_id")
                     val coordX = resultSet.getInt("x")
                     val coordZ = resultSet.getInt("z")
@@ -171,6 +176,7 @@ constructor(
                     val bannedUntil = resultSet.getLocalDateTime("banned_until")
                     val runEnergy = resultSet.getInt("run_energy")
                     val xpRateInHundreds = resultSet.getInt("xp_rate_in_hundreds")
+                    val totalPlayTimeSeconds = resultSet.getLong("total_play_time_seconds")
                     val varps = objectMapper.readReifiedValue<Map<Int, Int>>(varpsText)
                     val characterData =
                         CharacterAccountData(
@@ -192,6 +198,7 @@ constructor(
                             coordZ = coordZ,
                             coordLevel = coordLevel,
                             varps = varps,
+                            accountCreatedAt = accountCreatedAt,
                             createdAt = createdAt,
                             lastLogin = lastLogin,
                             lastLogout = lastLogout,
@@ -199,6 +206,7 @@ constructor(
                             bannedUntil = bannedUntil,
                             runEnergy = runEnergy,
                             xpRate = xpRateInHundreds / 100.0,
+                            totalPlayTimeSeconds = totalPlayTimeSeconds,
                         )
                     val metadataList = CharacterMetadataList(characterData, mutableListOf())
                     metadataList.add(applier, characterData)
@@ -221,13 +229,17 @@ constructor(
                 """
                     UPDATE characters
                     SET x = ?, z = ?, level = ?, varps = ?, last_login = ?, run_energy = ?,
-                        xp_rate_in_hundreds = ?, last_logout = CURRENT_TIMESTAMP
+                        xp_rate_in_hundreds = ?, total_play_time_seconds = ?,
+                        last_logout = CURRENT_TIMESTAMP
                     WHERE id = ?
                 """
                     .trimIndent()
             )
 
         updateCharacter.use {
+            val sessionSeconds =
+                Duration.between(player.lastLogin, LocalDateTime.now()).seconds.coerceAtLeast(0)
+            val totalPlayTimeSeconds = player.totalPlayTimeSeconds + sessionSeconds
             val persistentVarps =
                 player.vars.backing.filterKeys { id -> varpTypes[id]?.scope == VarpLifetime.Perm }
             val varpsJson = objectMapper.writeValueAsString(persistentVarps)
@@ -238,7 +250,8 @@ constructor(
             it.setSqliteTimestamp(5, player.lastLogin)
             it.setInt(6, player.runEnergy)
             it.setInt(7, (player.xpRate * 100).roundToInt())
-            it.setInt(8, characterId)
+            it.setLong(8, totalPlayTimeSeconds)
+            it.setInt(9, characterId)
             it.executeUpdate()
         }
 

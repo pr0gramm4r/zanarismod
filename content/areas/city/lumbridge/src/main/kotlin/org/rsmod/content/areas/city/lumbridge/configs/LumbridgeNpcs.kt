@@ -22,6 +22,7 @@ object LumbridgeNpcs : NpcReferences() {
     val bartender = find("ram_bartender", 3782636636485213848)
     val arthur_the_clue_hunter = find("aide_tutor_clues", 2398692310679668222)
     val prayer_tutor = find("aide_tutor_prayer", 1945582437385617574)
+    val mining_tutor = find("aide_tutor_mining", 3884255101619071543)
     val hatius_lumbridge_diary = find("hatius_lumbridge_diary", 7638020467539300041)
     val bob = find("bob", 852523917703846821)
     val woodsman_tutor = find("aide_tutor_woodsman", 7317297890904607119)
@@ -126,6 +127,11 @@ internal object LumbridgeNpcEditor : NpcEditor() {
 
         edit(lumbridge_npcs.fishing_tutor) {
             respawnDir = east
+            wanderRange = 0
+        }
+
+        edit(lumbridge_npcs.mining_tutor) {
+            respawnDir = south
             wanderRange = 0
         }
 
