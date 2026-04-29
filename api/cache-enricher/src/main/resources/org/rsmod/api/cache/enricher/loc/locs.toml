@@ -3972,7 +3972,7 @@ examine = 'An ornately-fashioned door.'
 
 [[config]]
 loc = 'elfdooropen'
-examine = 'An elf-fashioned door.'
+examine = 'An ornately-fashioned door.'
 
 [[config]]
 loc = 'prisondoor'
@@ -120837,4 +120837,3 @@ examine = 'A selection of staves.'
 [[config]]
 loc = 'debug_wall'
 examine = 'For debug.'
-
