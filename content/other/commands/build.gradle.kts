@@ -1,5 +1,6 @@
 plugins {
     id("base-conventions")
+    id("integration-test-suite")
 }
 
 dependencies {
@@ -10,7 +11,12 @@ dependencies {
     implementation(projects.api.pluginCommons)
     implementation(projects.api.realm)
     implementation(projects.api.realmConfig)
+    implementation(projects.api.type.typeBuilders)
     implementation(projects.api.type.typeSymbols)
     implementation(projects.api.utils.utilsSystem)
+    implementation(projects.content.interfaces.bank)
     implementation(projects.engine.utilsBits)
+    integrationImplementation(projects.content.interfaces.bank)
+    integrationImplementation(projects.api.invtx)
+    integrationImplementation(projects.api.player)
 }
