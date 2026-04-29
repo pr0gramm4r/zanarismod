@@ -44,8 +44,8 @@ constructor(
         val insert =
             connection.prepareStatement(
                 """
-                    INSERT INTO accounts (login_username, password_hash)
-                    VALUES (?, ?)
+                    INSERT INTO accounts (login_username, password_hash, members)
+                    VALUES (?, ?, TRUE)
                     ON CONFLICT(login_username) DO NOTHING
                 """
                     .trimIndent()
