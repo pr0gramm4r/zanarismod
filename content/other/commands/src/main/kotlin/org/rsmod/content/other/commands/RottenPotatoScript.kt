@@ -9,8 +9,8 @@ import org.rsmod.api.config.refs.objs
 import org.rsmod.api.player.forceDisconnect
 import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.protect.ProtectedAccess
-import org.rsmod.api.player.stat.hitpoints
 import org.rsmod.api.player.stat.PlayerSkillXP
+import org.rsmod.api.player.stat.hitpoints
 import org.rsmod.api.player.stat.stat
 import org.rsmod.api.player.stat.statAdvance
 import org.rsmod.api.player.stat.statSub
@@ -27,8 +27,8 @@ import org.rsmod.game.entity.PlayerList
 import org.rsmod.game.hit.HitType
 import org.rsmod.game.inv.InvObj
 import org.rsmod.game.inv.Inventory
-import org.rsmod.game.type.npc.NpcType
 import org.rsmod.game.stat.PlayerSkillXPTable
+import org.rsmod.game.type.npc.NpcType
 import org.rsmod.game.type.stat.StatType
 import org.rsmod.game.type.stat.StatTypeList
 import org.rsmod.plugin.scripts.PluginScript
