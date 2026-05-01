@@ -65,6 +65,24 @@ internal object VarBitBuilds : VarBitBuilder() {
             endBit = 1
         }
 
+        build("skill_guide_skill") {
+            baseVar = varps.generic_temp_state_65516
+            startBit = 2
+            endBit = 7
+        }
+
+        build("skill_guide_subsection") {
+            baseVar = varps.generic_temp_state_65516
+            startBit = 8
+            endBit = 15
+        }
+
+        build("stamina_duration_extra") {
+            baseVar = varps.generic_temp_state_65516
+            startBit = 16
+            endBit = 31
+        }
+
         build("saved_defensive_casting_staff") {
             baseVar = varps.saved_autocast_state_staff
             startBit = 0

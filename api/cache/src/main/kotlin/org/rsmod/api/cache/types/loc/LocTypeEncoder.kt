@@ -50,10 +50,15 @@ public object LocTypeEncoder {
     public fun encodeJs5(type: UnpackedLocType, data: ByteBuf, ctx: EncoderContext): Unit =
         with(type) {
             if (models.isNotEmpty() && shapes.isNotEmpty()) {
-                data.writeByte(1)
+                val wideModels = models.any { it > UShort.MAX_VALUE.toInt() }
+                data.writeByte(if (wideModels) 6 else 1)
                 data.writeByte(models.size)
                 for (i in models.indices) {
-                    data.writeShort(models[i])
+                    if (wideModels) {
+                        data.writeInt(models[i])
+                    } else {
+                        data.writeShort(models[i])
+                    }
                     data.writeByte(shapes[i].toInt())
                 }
             }
@@ -64,10 +69,15 @@ public object LocTypeEncoder {
             }
 
             if (models.isNotEmpty() && shapes.isEmpty()) {
-                data.writeByte(5)
+                val wideModels = models.any { it > UShort.MAX_VALUE.toInt() }
+                data.writeByte(if (wideModels) 7 else 5)
                 data.writeByte(models.size)
                 for (model in models) {
-                    data.writeShort(model)
+                    if (wideModels) {
+                        data.writeInt(model)
+                    } else {
+                        data.writeShort(model)
+                    }
                 }
             }
 
@@ -275,6 +285,10 @@ public object LocTypeEncoder {
 
             if (fixLocAnimAfterLocChange) {
                 data.writeByte(90)
+            }
+
+            if (extraJs5Config.isNotEmpty()) {
+                data.writeBytes(extraJs5Config)
             }
 
             val params = paramMap?.filterTransmit(ctx)?.primitiveMap

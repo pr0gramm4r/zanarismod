@@ -6,6 +6,7 @@ import kotlin.jvm.java
 import net.rsprot.protocol.game.incoming.buttons.If3Button
 import net.rsprot.protocol.game.incoming.buttons.IfButtonD
 import net.rsprot.protocol.game.incoming.buttons.IfButtonT
+import net.rsprot.protocol.game.incoming.buttons.IfScriptTrigger
 import net.rsprot.protocol.game.incoming.locs.OpLoc
 import net.rsprot.protocol.game.incoming.locs.OpLoc6
 import net.rsprot.protocol.game.incoming.locs.OpLocT
@@ -35,6 +36,7 @@ import org.rsmod.api.net.rsprot.handlers.CloseModalHandler
 import org.rsmod.api.net.rsprot.handlers.If3ButtonHandler
 import org.rsmod.api.net.rsprot.handlers.IfButtonDHandler
 import org.rsmod.api.net.rsprot.handlers.IfButtonTHandler
+import org.rsmod.api.net.rsprot.handlers.IfScriptTriggerHandler
 import org.rsmod.api.net.rsprot.handlers.MapBuildCompleteHandler
 import org.rsmod.api.net.rsprot.handlers.MessagePublicHandler
 import org.rsmod.api.net.rsprot.handlers.MoveGameClickHandler
@@ -75,6 +77,7 @@ constructor(
     private val opPlayerT: OpPlayerTHandler,
     private val messagePublic: MessagePublicHandler,
     private val if3Button: If3ButtonHandler,
+    private val ifScriptTrigger: IfScriptTriggerHandler,
     private val closeModal: CloseModalHandler,
     private val resumePauseButton: ResumePauseButtonHandler,
     private val opObj: OpObjHandler,
@@ -103,6 +106,7 @@ constructor(
         builder.addListener(OpPlayerT::class.java, opPlayerT)
         builder.addListener(MessagePublic::class.java, messagePublic)
         builder.addListener(If3Button::class.java, if3Button)
+        builder.addListener(IfScriptTrigger::class.java, ifScriptTrigger)
         builder.addListener(CloseModal::class.java, closeModal)
         builder.addListener(ResumePauseButton::class.java, resumePauseButton)
         builder.addListener(OpObj::class.java, opObj)

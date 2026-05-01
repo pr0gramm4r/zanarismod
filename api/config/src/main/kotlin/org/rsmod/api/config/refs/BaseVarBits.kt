@@ -11,8 +11,8 @@ object BaseVarBits : VarBitReferences() {
     val singleway_plus_indicator = find("singleway_plus_indicator", 52603174350056)
 
     val stamina_active = find("stamina_active", 81145461762806)
-    val stamina_duration = find("stamina_duration", 14272015789523)
-    val stamina_duration_extra = find("stamina_duration_extra", 14272015867960)
+    val stamina_duration = find("stamina_duration", 14272015838872)
+    val stamina_duration_extra = find("stamina_duration_extra", 450780931095069)
     val buff_stamina_duration_disabled = find("buff_stamina_duration_disabled", 158374502904462)
 
     val side_journal_tab = find("side_journal_tab", 58785619230382)
@@ -50,6 +50,14 @@ object BaseVarBits : VarBitReferences() {
     val option_music_saved = find("option_music_saved", 160177715962204)
     val option_sounds_saved = find("option_sounds_saved", 160177715992400)
     val option_areasounds_saved = find("option_areasounds_saved", 160177716018875)
+    val option_master_volume_desktop = find("option_master_volume_desktop")
+    val option_master_volume_saved_desktop = find("option_master_volume_saved_desktop")
+    val option_music_desktop = find("option_music_desktop")
+    val option_music_saved_desktop = find("option_music_saved_desktop")
+    val option_sounds_desktop = find("option_sounds_desktop")
+    val option_sounds_saved_desktop = find("option_sounds_saved_desktop")
+    val option_areasounds_desktop = find("option_areasounds_desktop")
+    val option_areasounds_saved_desktop = find("option_areasounds_saved_desktop")
     val music_unlock_text_toggle = find("music_unlock_text_toggle", 979759217977)
 
     val music_area_mode = find("music_area_mode", 979759223975)

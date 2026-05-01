@@ -64,6 +64,23 @@ public object LocTypeDecoder {
                     repeat(count) { models[it] = data.readUnsignedShort() }
                     this.model = CompactableIntArray(models)
                 }
+                6 -> {
+                    val count = data.readUnsignedByte().toInt()
+                    val models = IntArray(count)
+                    val shapes = IntArray(count)
+                    repeat(count) {
+                        models[it] = data.readInt()
+                        shapes[it] = data.readUnsignedByte().toInt()
+                    }
+                    this.model = CompactableIntArray(models)
+                    this.modelShape = CompactableIntArray(shapes)
+                }
+                7 -> {
+                    val count = data.readUnsignedByte().toInt()
+                    val models = IntArray(count)
+                    repeat(count) { models[it] = data.readInt() }
+                    this.model = CompactableIntArray(models)
+                }
                 14 -> width = data.readUnsignedByte().toInt()
                 15 -> length = data.readUnsignedByte().toInt()
                 17 -> {
@@ -154,9 +171,63 @@ public object LocTypeDecoder {
                 82 -> mapIcon = data.readUnsignedShort()
                 89 -> randomAnimFrame = false
                 90 -> fixLocAnimAfterLocChange = true
+                91 -> preserveExtraJs5Config(data, code) { data.readUnsignedByte() }
                 200 -> contentGroup = data.readUnsignedShort()
+                93 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                    }
+                }
+                94 -> preserveExtraJs5Config(data, code) {}
+                95,
+                96 -> preserveExtraJs5Config(data, code) { data.readUnsignedByte() }
+                100 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedByte()
+                        data.readString()
+                    }
+                }
+                101 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readInt()
+                        data.readInt()
+                        data.readString()
+                    }
+                }
+                102 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readInt()
+                        data.readInt()
+                        data.readString()
+                    }
+                }
                 249 -> paramMap = ParamMap(data.readRawParams())
                 else -> throw IOException("Error unrecognised .loc config code: $code")
             }
         }
+
+    private inline fun LocTypeBuilder.preserveExtraJs5Config(
+        data: ByteBuf,
+        code: Int,
+        readPayload: () -> Unit,
+    ) {
+        val start = data.readerIndex()
+        readPayload()
+        val length = data.readerIndex() - start
+        val next = extraJs5Config.copyOf(extraJs5Config.size + length + 1)
+        next[extraJs5Config.size] = code.toByte()
+        data.getBytes(start, next, extraJs5Config.size + 1, length)
+        extraJs5Config = next
+    }
 }

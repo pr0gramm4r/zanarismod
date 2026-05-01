@@ -7,6 +7,7 @@ import org.rsmod.game.movement.BlockWalk
 import org.rsmod.game.movement.MoveRestrict
 import org.rsmod.game.type.util.CompactableIntArray
 import org.rsmod.game.type.util.GenericPropertySelector.select
+import org.rsmod.game.type.util.GenericPropertySelector.selectByteArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectIntArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectParamMap
 import org.rsmod.game.type.util.GenericPropertySelector.selectPredicate
@@ -61,6 +62,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
     public var crawlTurnBackAnim: Int? = null
     public var crawlTurnLeftAnim: Int? = null
     public var crawlTurnRightAnim: Int? = null
+    public var extraJs5Config: ByteArray = ByteArray(0)
     public var paramMap: ParamMap? = null
     public var moveRestrict: MoveRestrict? = null
     public var defaultMode: NpcMode? = null
@@ -160,7 +162,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
             recolD = recolD.toShortArray(),
             retexS = retexS.toShortArray(),
             retexD = retexD.toShortArray(),
-            head = head.toShortArray(),
+            head = head.toIntArray(),
             minimap = minimap,
             vislevel = vislevel,
             resizeH = resizeH,
@@ -188,6 +190,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
             crawlTurnBackAnim = crawlTurnBackAnim,
             crawlTurnLeftAnim = crawlTurnLeftAnim,
             crawlTurnRightAnim = crawlTurnRightAnim,
+            extraJs5Config = extraJs5Config,
             paramMap = paramMap,
             moveRestrict = moveRestrict,
             defaultMode = defaultMode,
@@ -269,7 +272,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
             val recolD = selectShortArray(edit, base) { recolD }
             val retexS = selectShortArray(edit, base) { retexS }
             val retexD = selectShortArray(edit, base) { retexD }
-            val head = selectShortArray(edit, base) { head }
+            val head = selectIntArray(edit, base) { head }
             val minimap = select(edit, base, DEFAULT_MINIMAP) { minimap }
             val vislevel = select(edit, base, DEFAULT_VISLEVEL) { vislevel }
             val resizeH = select(edit, base, DEFAULT_RESIZE_H) { resizeH }
@@ -297,6 +300,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
             val crawlTurnBackAnim = select(edit, base, DEFAULT_ANIM) { crawlTurnBackAnim }
             val crawlTurnLeftAnim = select(edit, base, DEFAULT_ANIM) { crawlTurnLeftAnim }
             val crawlTurnRightAnim = select(edit, base, DEFAULT_ANIM) { crawlTurnRightAnim }
+            val extraJs5Config = selectByteArray(edit, base) { extraJs5Config }
             val paramMap = selectParamMap(edit, base) { paramMap }
             val moveRestrict = select(edit, base, DEFAULT_MOVE_RESTRICT) { moveRestrict }
             val defaultMode = select(edit, base, DEFAULT_MODE) { defaultMode }
@@ -366,6 +370,7 @@ public class NpcTypeBuilder(public var internal: String? = null) {
                 crawlTurnBackAnim = crawlTurnBackAnim,
                 crawlTurnLeftAnim = crawlTurnLeftAnim,
                 crawlTurnRightAnim = crawlTurnRightAnim,
+                extraJs5Config = extraJs5Config,
                 paramMap = paramMap,
                 moveRestrict = moveRestrict,
                 defaultMode = defaultMode,

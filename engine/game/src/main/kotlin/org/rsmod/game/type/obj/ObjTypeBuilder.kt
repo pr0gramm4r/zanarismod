@@ -2,6 +2,7 @@ package org.rsmod.game.type.obj
 
 import org.rsmod.game.type.util.CompactableIntArray
 import org.rsmod.game.type.util.GenericPropertySelector.select
+import org.rsmod.game.type.util.GenericPropertySelector.selectByteArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectIntArray
 import org.rsmod.game.type.util.GenericPropertySelector.selectParamMap
 import org.rsmod.game.type.util.GenericPropertySelector.selectPredicate
@@ -71,6 +72,7 @@ public class ObjTypeBuilder(public var internal: String? = null) {
     public var boughttemplate: Int? = null
     public var placeholderlink: Int? = null
     public var placeholdertemplate: Int? = null
+    public var extraJs5Config: ByteArray = ByteArray(0)
     public var paramMap: ParamMap? = null
     public var generateCertificate: Boolean? = false
     public var generatePlaceholder: Boolean? = false
@@ -204,6 +206,7 @@ public class ObjTypeBuilder(public var internal: String? = null) {
             boughttemplate = boughttemplate,
             placeholderlink = placeholderlink,
             placeholdertemplate = placeholdertemplate,
+            extraJs5Config = extraJs5Config,
             paramMap = paramMap,
             generateCertificate = generateCertificate,
             generatePlaceholder = generatePlaceholder,
@@ -315,6 +318,7 @@ public class ObjTypeBuilder(public var internal: String? = null) {
             val boughttemplate = select(edit, base, default = 0) { boughttemplate }
             val placeholderlink = select(edit, base, default = 0) { placeholderlink }
             val placeholdertemplate = select(edit, base, default = 0) { placeholdertemplate }
+            val extraJs5Config = selectByteArray(edit, base) { extraJs5Config }
             val paramMap = selectParamMap(edit, base) { paramMap }
             val objvar = selectIntArray(edit, base) { objvar }
             val generateCertificate = select(edit, base, default = false) { generateCertificate }
@@ -390,6 +394,7 @@ public class ObjTypeBuilder(public var internal: String? = null) {
                 boughttemplate = boughttemplate,
                 placeholderlink = placeholderlink,
                 placeholdertemplate = placeholdertemplate,
+                extraJs5Config = extraJs5Config,
                 paramMap = paramMap,
                 generateCertificate = generateCertificate,
                 generatePlaceholder = generatePlaceholder,

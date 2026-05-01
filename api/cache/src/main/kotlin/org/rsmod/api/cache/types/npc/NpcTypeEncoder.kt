@@ -54,10 +54,15 @@ public object NpcTypeEncoder {
     public fun encodeJs5(type: UnpackedNpcType, data: ByteBuf, ctx: EncoderContext): Unit =
         with(type) {
             if (models.isNotEmpty()) {
-                data.writeByte(1)
+                val wideModels = models.any { it > UShort.MAX_VALUE.toInt() }
+                data.writeByte(if (wideModels) 61 else 1)
                 data.writeByte(models.size)
                 for (model in models) {
-                    data.writeShort(model)
+                    if (wideModels) {
+                        data.writeInt(model)
+                    } else {
+                        data.writeShort(model)
+                    }
                 }
             }
 
@@ -133,10 +138,15 @@ public object NpcTypeEncoder {
             }
 
             if (head.isNotEmpty()) {
-                data.writeByte(60)
+                val wideModels = head.any { it > UShort.MAX_VALUE.toInt() }
+                data.writeByte(if (wideModels) 62 else 60)
                 data.writeByte(head.size)
                 for (i in head.indices) {
-                    data.writeShort(head[i].toInt())
+                    if (wideModels) {
+                        data.writeInt(head[i])
+                    } else {
+                        data.writeShort(head[i])
+                    }
                 }
             }
 
@@ -292,6 +302,10 @@ public object NpcTypeEncoder {
             if (overlayHeight != NpcTypeBuilder.DEFAULT_OVERLAY_HEIGHT) {
                 data.writeByte(124)
                 data.writeShort(overlayHeight)
+            }
+
+            if (extraJs5Config.isNotEmpty()) {
+                data.writeBytes(extraJs5Config)
             }
 
             val params = paramMap?.filterTransmit(ctx)?.primitiveMap

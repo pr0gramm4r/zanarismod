@@ -1,1 +1,857 @@
+0	scape main
+1	iban
+2	autumn voyage
+3	unknown land
+4	hells bells
+5	sad meadow
+6	jollyR
+7	overture
+8	wildwood
+9	kingdom
+10	moody
+11	spooky2
+12	long way home
+13	mage arena
+14	witching
+15	workshop
+16	scape main default
+17	escape
+18	horizon
+19	arabique
+20	lullaby
+21	monarch waltz
+22	gnome king
+23	fe fi fo fum
+24	attack1
+25	attack2
+26	attack3
+27	attack4
+28	attack5
+29	attack6
+30	voodoo cult
+31	Fight of the Basilisk
+32	voyage
+33	gnome village
+34	wonder
+35	sea shanty2
+36	arabian
+37	deep wildy
+38	trawler
+39	church music 1
+40	church music 2
+41	expecting
+42	wilderness2
+43	wilderness3
+44	Right on Track
+45	venture2
+46	harmony2
+47	duel arena
+48	morytania
+49	wander
+50	al kharid
+51	trawler minor
+52	serene
+53	royale
+54	scape soft
+55	high seas
+56	doorways
+57	rune essence
+58	nomad
+59	cursed
+60	lasting
+61	village
+62	newbie melody
+63	chain of command
+64	book of spells
+65	miracle dance
+66	legion
+67	close quarters
+68	cavern
+69	egypt
+70	upcoming
+71	chompy hunt
+72	fanfare
+73	alls fairy in love n war
+74	lightwalk
+75	venture
+76	harmony
+77	splendour
+78	reggae
+79	the desert
+80	soundscape
+81	wonderous
+82	waterfall
+83	big chords
+84	dead quiet
+85	vision
+86	Dimension X
+87	ice melody
+88	twilight
+89	reggae2
+90	ambient jungle
+91	riverside
+92	sea shanty
+93	parade
+94	tribal2
+95	intrepid
+96	inspiration
+97	hermit
+98	forever
+99	baroque
+100	beyond
+101	gnome village2
+102	alone
+103	oriental
+104	camelot
+105	tomorrow
+106	expanse
+107	miles away
+108	starlight
+109	theme
+110	serenade
+111	still night
+112	gnomeball
+113	lightness
+114	jungly1
+115	jungly2
+116	greatness
+117	jungly3
+118	faerie
+119	fishing
+120	shining
+121	forbidden
+122	shine
+123	arabian2
+124	arabian3
+125	garden
+126	we are the fairies
+127	nightfall
+128	grumpy
+129	spookyjungle
+130	tree spirits
+131	understanding
+132	breeze
+133	the tower
+134	La Mort
+135	Jaws of the Basilisk
+136	Lair of the Basilisk
+137	avium_savannah_3
+138	emperor
+139	Ballad of the Basilisk
+140	talking forest
+141	barbarianism
+142	complication
+143	down to earth
+144	scape cave
+145	yesteryear
+146	zealot
 147	stop_music
+148	emotion
+149	principality
+150	mouse trap
+151	start
+152	ballad of enchantment
+153	expedition
+154	bone dance
+155	neverland
+156	mausoleum
+157	medieval
+158	quest
+159	gaol
+160	army of darkness
+161	long ago
+162	tribal background
+163	Flute Salad
+164	landlubber
+165	tribal
+166	fanfare2
+167	fanfare3
+168	lonesome
+169	crystal sword
+170	the shadow
+171	null
+172	jungle island
+173	dunjun
+174	desert voyage
+175	spirit
+176	undercurrent
+177	adventure
+178	courage
+179	underground
+180	attention
+181	crystal cave
+182	dangerous
+183	troubled
+184	magical journey
+185	magic dance
+186	arrival
+187	tremble
+188	in the manor
+189	wolf mountain
+190	heart and mind
+191	knightly
+192	trinity
+193	mellow
+194	Brimstail's Scales
+195	delrith summoning
+196	wally cutscene
+197	lament of meiyerditch
+198	dagannoth dawn
+199	Jormungand Fight
+200	the mollusc menace
+201	slug a bug ball
+202	prime time
+203	my arms journey
+204	roc and roll
+205	high spirits
+206	floating free
+207	scape hunter
+208	jungle island xmas
+209	jungle bells
+210	sea shanty xmas
+211	pirates of penance
+212	barbarian assault tutorial
+213	labyrinth
+214	undead dungeon
+215	lotr_jingle_3
+216	espionage
+217	have an ice day
+218	peng_bards_jingle
+219	peng_plans_jingle
+220	island of the trolls
+221	jester minute
+222	major miner
+223	norse code
+224	ogre the top
+225	volcanic vikings
+226	fremmenik trollking jingle
+227	fris_jingle_1
+228	Garden of Autumn
+229	Garden of Spring
+230	Garden of Summer
+231	Garden of Winter
+232	Osmans Garden Loop
+233	shadows bouncer jingle
+234	creature cruelty
+235	magic magic magic
+236	mutant medley
+237	work work work
+238	zombiism
+239	brain_barrelchest_battle
+240	dorgeshun city
+241	stagnant
+242	time out
+243	stratosphere
+244	waterlogged
+245	natural
+246	grotto
+247	artistry
+248	aztec
+249	dorgeshun deep
+250	surok_king_battle_music
+251	forest
+252	elven mist
+253	lost soul
+254	meridian
+255	woodland
+256	overpass
+257	sojourn
+258	contest
+259	crystal castle
+260	insect queen
+261	marzipan
+262	righteousness
+263	bandit camp
+264	mad eadgar
+265	superstition
+266	bone dry
+267	sunburn
+268	everywhere
+269	competition
+270	exposed
+271	well of voyage
+272	alternative root
+273	Easter Jig
+274	rising damp
+275	slice of station
+276	HAM and seek
+277	haunted mine
+278	deep down
+279	ham attack
+280	yama_combat
+281	slice of silent movie
+282	chamber
+283	Everlasting
+284	miscellania
+285	etcetera
+286	shadowland
+287	lair
+288	deadlands
+289	rellekka
+290	saga
+291	borderland
+292	stranded
+293	legend
+294	frostbite
+295	warrior
+296	technology
+297	etcetera theme
+298	Illusive
+299	Inadequacy
+300	Untouchable
+301	down and out
+302	on the up
+303	monkey madness
+304	marooned
+305	anywhere
+306	island life
+307	temple
+308	suspicious
+309	looking back
+310	dwarf theme
+311	showdown
+312	find my way
+313	goblin village
+314	castlewars
+315	Impetuous_clue
+316	the navigator
+317	melodrama
+318	ready for battle
+319	stillness
+320	lighthouse
+321	scape scared
+322	out of the deep
+323	Upass
+324	background
+325	cave background
+326	dark
+327	dream
+328	march
+329	regal
+330	cellar song
+331	scape sad
+332	scape wild
+333	spooky
+334	pirates of peril
+335	romancing the crone
+336	dangerous road
+337	faithless
+338	tiptoe
+339	the terrible tower
+340	masquerade
+341	the slayer
+342	body parts
+343	monster melee
+344	fenkenstrain's Refrain
+345	barking mad
+346	goblin game
+347	fruits de mer
+348	narnode's theme
+349	Impetuous
+350	crest of a wave
+351	dynasty
+352	scarab
+353	shipwrecked
+354	phasmatys
+355	the other side
+356	settlement
+357	cave of beasts
+358	dragontooth island
+359	sarcophagus
+360	wet and wild
+361	down below
+362	karamja jam
+363	7th Realm
+364	pathways
+365	melzars maze
+366	eagle peak
+367	barb wire
+368	observatory telescope cutscene
+369	time to mine
+370	in between
+371	schools out
+372	far away
+373	claustrophobia
+374	knightmare
+375	fight or flight
+376	temple of light
+377	the golem
+378	forgotten
+379	throne of the demon
+380	dance of the undead
+381	dangerous way
+382	lore and order
+383	city of the dead
+384	hypnotized
+385	kr_betray_jingle
+386	Too Many Cooks
+387	sphinx
+388	mirage
+389	cave of the goblins
+390	romper chomper
+391	strength of saradomin
+392	zogre dance
+393	path of peril
+394	wayward
+395	Tale of Keldagrim
+396	land of the dwarves
+397	tears of guthix
+398	the power of tears
+399	zamorak zoo
+400	scape original
+401	the adventurer
+402	The Rogues Den
+403	The Far Side
+404	armageddon
+405	Giant Dwarf Meeting
+406	giantsfoundry_02
+407	The Lost Melody
+408	bandos battalion
+409	Frogland
+410	Lost Tribe Cutscene
+411	Evil Bobs Island
+412	Into the Abyss
+413	The Quizmaster
+414	armadyl alliance
+415	Athletes Foot
+416	gnome_village_party
+417	beneath_the_stronghold
+418	Corporal Punishment
+419	Pheasant Peasant
+420	The Lost Tribe
+421	troubled_waters
+422	nether_realm
+423	scorpia_dances
+424	devils_may_care
+425	The Chosen
+426	pick_and_shovel
+427	warpath
+428	clanwars
+429	shining_spirit
+430	corporealbeast
+431	grimly_fiendish
+432	coil
+433	thrall_of_the_serpent
+434	have a blast
+435	wilderness
+436	Forgettable Melody
+437	bunny_sugar_rush
+438	Drunken Dwarf
+439	maws_jaws_claws
+440	that_sullen_hall
+441	sire
+442	dies_irae
+443	nox_irae
+444	soulfall
+445	rugged_terrain
+446	zeah_mining
+447	Over to Nardah
+448	The Monsters Below
+449	zeah_combat
+450	zeah_fishing
+451	kourend_the_magnificent
+452	forlorn_homestead
+453	jungle hunt
+454	home sweet home
+455	zeah_magic
+456	zeah_farming
+457	Monkey Trouble
+458	scape_ape
+459	Monkey Sadness
+460	joy of the hunt
+461	the desolate isle
+462	Spirits of Elid
+463	Fire and Brimstone
+464	The Genie
+465	Desert Heat
+466	ground scape
+467	monkey business
+468	monkey badness
+469	In the Pits
+470	strange place
+471	brew hoo hoo
+472	darkly_altared
+473	Tzhaar
+474	last_man_standing
+475	wild side
+476	dead can dance
+477	wasteland
+478	the cellar dwellers
+479	jungle troubles
+480	mined out
+481	catch me if you can
+482	rat a tat tat
+483	wintertodt_boss
+484	bobs on holiday
+485	The Noble Rodent
+486	altar_ego
+487	lower_depths
+488	shayzien_march
+489	bubble and squeak
+490	sarim's vermin
+491	rat hunt
+492	upper_depths
+493	olm_battle
+494	ascent
+495	desolate_mage
+496	the trade parade
+497	Aye Car Rum Ba
+498	blistering barnacles
+499	darkness_in_the_depths
+500	inferno
+501	Distant Land
+502	mor-ul-rek
+503	osrs_fossil_island_underwater_2017
+504	fangs for the memory
+505	pharoah's tomb
+506	land down under
+507	osrs_fossil_island_lava_mine_2017
+508	meddling kids
+509	corridors of power
+510	slither and thither
+511	In The Clink
+512	osrs_fossil_island_overground_2_2017
+513	osrs_fossil_island_overground_1_2017
+514	osrs_fossil_island_underground_2017
+515	mudskipper melody
+516	osrs_fossil_island_overground_2017
+517	subterranea
+518	gargoyleboss
+519	incantation
+520	grip of the talon
+521	revenants
+522	on_the_shore
+523	land of snow
+524	xenophobe
+525	title fight
+526	winter funfare
+527	Dragonkin Ambience
+528	Victory is Mine
+529	woe of the wyvern
+530	In the Brine
+531	Lucid Nightmare
+532	diango's little helpers
+533	roll the bones
+534	mind over matter
+535	golden touch
+536	Zombie dragon
+537	dogs of war
+538	Autumn in BridgeLum
+539	Lucid Dream
+540	Oncoming foe
+541	the enchanter
+542	lament
+543	Galvic Boss Fight
+544	making waves
+545	cabin fever
+546	last stand
+547	scape santa
+548	poles apart
+549	Dragonkin Temple
+550	Myths Guild
+551	Shayzien Crypt
+552	scape five v5
+553	os anniversary medley v3
+554	roots_and_flutes
+555	Ranis_Duel_4_10
+556	Welcome_To_The_Theatre_6
+557	Bloodbath
+558	food for thought
+559	malady
+560	dance of death
+561	Conspiracy
+562	Vanescula
+563	Bait
+564	Xarpus Combat
+565	wrath and ruin
+566	Verzik Ambience
+567	Xarpus Ambience
+568	storm brew
+569	Maiden Combat
+570	Maiden Ambience
+571	Pestilent Bloat Combat
+572	Verzik Combat
+573	The mad mole
+574	fairy dragon cutscene
+575	chickened out
+576	davy jones locker
+577	mastermindless
+578	Pestilent Bloat Ambience
+579	Nylocas Combat
+580	Nylocas Ambience
+581	Sotetseg Combat
+582	Verzik Defeated
+583	Chef Surprize
+584	Sotetseg Ambience
+585	barren_land
+586	Everlasting Fire
+587	null and void
+588	pest control
+589	my2arm_love_theme_full
+590	weiss_town
+591	tomb raider
+592	troll_shuffle
+593	my2arm_boss_battle
+594	no way out
+595	Way Of The Wyrm
+596	Hespori Cave
+597	Newbie Farming
+598	Alchemical Hydra
+599	Hoe Down
+600	method of madness
+601	Hespori
+602	fear and loathing
+603	funny bunnies
+604	assault and battery
+605	Battlefront
+606	the depths
+607	Stuck in the Mire
+608	Kanon Of Khalith
+609	A Farmers Grind
+610	distillery hilarity
+611	trouble brewing
+612	head to head
+613	Grow Grow Grow
+614	pinball wizard
+615	Beetle Juice
+616	back to life
+617	Getting Down To Business
+618	Gill Bill
+619	spy games
+620	where eagles lair
+621	HomeScape
+622	waking dream
+623	dreamstate
+624	Forsaken Tower
+625	the lunar isle
+626	way of the enchanter
+627	isle of everywhere
+628	Molch
+629	Burning Desire
+630	the galleon
+631	life's a beach!
+632	little cave of horrors
+633	On the Wing
+634	Warriors Guild
+635	Ful To The Brim
+636	Woodland Walk
+637	box_of_delights
+638	HAM fisted
+639	forthos_dungeon
+640	Sigmunds showdown
+641	sarachnis_lair
+642	No Pasaran
+643	the last shanty
+644	iowerths_lament
+645	warped_library
+646	night of the vampiyre
+647	city_guardians
+648	the_tower_of_voices
+649	traehern_toil
+650	gauntlet_minigame
+651	ithell
+652	The Dark Fragment
+653	faith_of_the_hefin
+654	Elven Seed
+655	amlodd
+656	Stand up and be Counted
+657	prif_slayer_dungeon
+658	lletyas_destruction
+659	cryws
+660	dance_of_the_meilyr
+661	Scape Crystal
+662	zalcano_combat
+663	nightmare_combat
+664	Slepe Dungeon
+665	iceyene_1
+666	lord_drakan_reveal_combi_1
+667	The Terrible Caverns
+668	lord_drakan_reveal_part_2
+669	Well Hallowed Air
+670	Arboretum
+671	Darkmeyer
+672	Upir Likhyi
+673	lord_drakan_reveal_part_1
+674	Hallowed Sepulchre
+675	The Terrible Tunnels
+676	Werewolves
+677	Domain of the Vampyres
+678	Vanstrom
+679	rest_in_peace
+680	The Enclave
+681	Safety in Numbers
+682	eves Epinette
+683	sea_minor_shanty
+684	Revenant Slayer Cave
+685	Soul Wars
+686	The Waiting Game
+687	Scrubfoots Descent
+688	Tempoross
+689	training_montage
+690	camdozaal_vault
+691	Camdozaal_ruins_2021
+692	rhapsody
+693	clanliness
+694	CatacombsOfKourend
+695	ShayzienForces
+696	JudgeOfYama
+697	Coronation
+698	Xamphur
+699	HousesOfKourend
+700	Rose
+701	Confrontation
+702	araxyte
+703	warrens
+704	lovakengj_outskirts
+705	arceuus_outskirts
+706	shayzien_outskirts
+707	hosidius_outskirts
+708	xmas_2021
+709	Ancient Prison
+710	Zaros Zeitgeist
+711	The Angels Fury
+712	Leagues III Cutscene
+713	Dusk in Yu'biusk
+714	Don't Panic Zanik
+715	Catacombs and Tombs
+716	zanik's theme
+717	temple of tribes
+718	guardian_preparation
+719	Temple of the Eye
+720	Guardians of the Rift
+721	venomous
+722	bcs_necropolis
+723	bcs_cutscene
+724	bcs_tomb
+725	bcs_ruin
+726	bcs_combat
+727	Gates of Menaphos
+728	Spymaster
+729	The Old Ones
+730	toa_ambience
+731	toa_victory
+732	toa_path_het
+733	toa_path_crondis
+734	toa_lobby
+735	toa_boss_wardens
+736	toa_boss_zebak
+737	toa_boss_kephri
+738	toa_path_scabaras
+739	toa_boss_akkha
+740	toa_boss_baba
+741	toa_path_apmeken
+742	Muspah Boss
+743	Ghorrock Dungeon
+744	Assassin Boss
+745	dt2_scar
+746	dt2_wights
+747	dt2_pursuer
+748	dt2_horn
+749	dt2_whisperer
+750	dt2_leviathan
+751	dt2_horn_part_3
+752	dt2_sliske
+753	dt2_horn_part_6
+754	dt2_horn_part_4
+755	dt2_horn_part_5
+756	dt2_lassar
+757	dt2_digsite
+758	dt2_horn_part_2
+759	dt2_ghorrock
+760	dt2_horn_part_1
+761	dt2_vardorvis
+762	dt2_vault
+763	dt2_sucellus
+764	dt2_stranglewood
+765	dt2_lassar_silent
+766	ralos_rise
+767	healin' feelin'
+768	terrorbird tussle
+769	bolrie's diary
+770	waste defaced
+771	the longramble scramble
+772	storeroom shuffle
+773	Yuletide eve
+774	vmq1_cs2_01
+775	vmq1_cs3_01
+776	vmq1_cs1_01
+777	ratboss_01
+778	zombie invasion
+779	undead army
+780	dream theatre
+781	hunter_guild
+782	fortis_colosseum
+783	avium_savannah
+784	cam_torum
+785	neypotzli
+786	perilous_moons
+787	civitas_illa_fortis
+788	easter_2024
+789	incarceration
+790	the evil within
+791	the sound of guthix
+792	temple desecrated
+793	the kin
+794	the kin fade
+795	dangerous logic
+796	the stone
+797	the route of all evil
+798	black of knight
+799	the route of the problem
+800	araxxor_combat
+801	hueycoatl
+802	quetzacalli_gorge
+803	sunset_coast
+804	aldarin_2
+805	aldarin
+806	mistrock
+807	amoxliatl
+808	avium_savannah_2
+809	twilight_temple
+810	vmq1_cs4_01
+811	civitas_illa_fortis_2
+812	the plundered tomb
+813	hailstorm_mountains
+814	lamistards labyrinth
+815	heavy security
+816	the heist
+817	the north
+818	tal_teklan
+819	stalker_dungeon
+820	mokhaiotl
+821	final_dawn_combat_2
+822	auburn_valley
+823	final_dawn_combat_1
+824	metzli_boss
+825	tlati_rainforest
+826	custodia_mountains
+827	kastori
+828	doom_boss
+829	auburn_valley_2
+833	ardent_ocean
+834	ardent_ocean_2
+835	barracuda_trials
+836	calm_islands
+837	charting_complete
+838	dangerous_islands
+839	great_conch
+840	great_conch_2
+841	great_conch_underground
+842	gryphon_boss
+843	honkytonky_sea_shanty_2
+844	industrial_islands
+845	mysterious_islands
+846	northern_ocean
+847	northern_ocean_2
+848	scape_sail
+849	shrouded_ocean
+850	shrouded_ocean_2
+851	sunset_ocean
+852	sunset_ocean_2
+853	unquiet_ocean
+854	unquiet_ocean_2
+855	western_ocean
+856	western_ocean_2
+857	yo_ho_ho
+858	midi_858
+859	midi_859

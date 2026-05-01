@@ -1,7 +1,7 @@
-# RS Mod
+# ZanaRiSmod
 [![revision][rev-badge]][patch] [![license][license-badge]][isc] [![chat][discord-badge]][discord] [![Github Actions][core-ci-badge]][core-ci] [![Github Actions][nightly-ci-badge]][nightly-ci]
 
-RS Mod is a RuneScape game-server emulator that aims to be as mechanically accurate to the original as possible.
+ZanaRiSmod is a RuneScape game-server emulator that aims to be as mechanically acurate as necessary to create AI impressions of RuneScape in a controlled environment
 
 ## Requirements
 This project requires **[Java 21][java] or later**.
@@ -28,7 +28,7 @@ _Check out the [Installing Java](#installing-java) section for setup instruction
   gradlew install --console=plain && gradlew run --console=plain
   ```
 
-_RS Mod is compatible with [RSProx][rsprox]. It is the most readily-available client to use for the game-server._
+_ZanaRiSmod is compatible with [RSProx][rsprox]. It is the most readily-available client to use for the game-server._
 
 _Check out the [Compatible Clients](#compatible-clients) section for more information._
 
@@ -62,24 +62,30 @@ We highly suggest using [RSProx][rsprox] as the client-of-choice:
 
 This is an invaluable tool for debugging and ensuring accurate game mechanics.
 
+For local RSProx targets, use revision `237.5`, port `43594`, and the RSA modulus
+printed by `generateRsa` or stored in `.data/client.key`.
+
+Protocol support is provided through the published [rsprot][rsprot] artifacts.
+
 ## Contributing
 At this time, the project is still in its early stages and not yet ready for external contributions. Before opening it up to contributions, we want to ensure the codebase and API are well-defined and that clear guidelines are in place for contributors.
 
 Stay tuned for updates as the project matures!
 
 ## License
-RS Mod is available under the terms of the ISC license, which is similar to the 2-clause BSD license. The full copyright notice and terms are available in the [LICENSE][license] file.
+ZanaRiSmod is available under the terms of the ISC license, which is similar to the 2-clause BSD license. The full copyright notice and terms are available in the [LICENSE][license] file. The original RS Mod license is preserved in [LICENSE-RSMOD.md][rsmod-license].
 
 ## Links
 * [Discord][discord]
 
 [isc]: https://opensource.org/licenses/ISC
-[license]: https://github.com/rsmod/rsmod/blob/main/LICENSE.md
+[license]: LICENSE.md
+[rsmod-license]: LICENSE-RSMOD.md
 [license-badge]: https://img.shields.io/badge/license-ISC-informational
 [discord]: https://discord.gg/UznZnZR
 [discord-badge]: https://img.shields.io/discord/550024461626114053?color=%237289da&logo=discord
-[patch]: https://oldschool.runescape.wiki/w/Update:Doom_Combat_Achievements
-[rev-badge]: https://img.shields.io/badge/revision-233-important
+[patch]: https://oldschool.runescape.wiki/w/Update:Leagues_VI_Changes
+[rev-badge]: https://img.shields.io/badge/revision-237-important
 [core-ci]: https://github.com/rsmod/rsmod/actions/workflows/core-ci.yml
 [core-ci-badge]: https://github.com/rsmod/rsmod/actions/workflows/core-ci.yml/badge.svg?branch=main
 [nightly-ci]: https://github.com/rsmod/rsmod/actions/workflows/nightly-ci.yml
@@ -92,3 +98,4 @@ RS Mod is available under the terms of the ISC license, which is similar to the 
 [homebrew]: https://brew.sh/
 [winget]: https://learn.microsoft.com/en-us/windows/package-manager/winget/
 [rsprox]: https://github.com/blurite/rsprox
+[rsprot]: https://github.com/blurite/rsprot

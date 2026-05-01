@@ -64,6 +64,7 @@ public class LocTypeBuilder(public var internal: String? = null) {
     public var mapIcon: Int? = null
     public var randomAnimFrame: Boolean? = null
     public var fixLocAnimAfterLocChange: Boolean? = null
+    public var extraJs5Config: ByteArray = ByteArray(0)
     public var paramMap: ParamMap? = null
     public var contentGroup: Int? = null
 
@@ -161,6 +162,7 @@ public class LocTypeBuilder(public var internal: String? = null) {
             mapIcon = mapIcon,
             randomAnimFrame = randomAnimFrame,
             fixLocAnimAfterLocChange = fixLocAnimAfterLocChange,
+            extraJs5Config = extraJs5Config,
             paramMap = paramMap,
             contentGroup = contentGroup,
             internalId = id,
@@ -255,6 +257,7 @@ public class LocTypeBuilder(public var internal: String? = null) {
             val retexD = selectShortArray(edit, base) { retexD }
             val multiLoc = selectShortArray(edit, base) { multiLoc }
             val bgsoundRandomSounds = selectShortArray(edit, base) { bgsoundRandomSounds }
+            val extraJs5Config = selectByteArray(edit, base) { extraJs5Config }
             val paramMap = selectParamMap(edit, base) { paramMap }
             val internalId = select(edit, base, default = null) { internalId }
             val internalName = select(edit, base, default = null) { internalName }
@@ -308,6 +311,7 @@ public class LocTypeBuilder(public var internal: String? = null) {
                 mapIcon = mapIcon,
                 randomAnimFrame = randomAnimFrame,
                 fixLocAnimAfterLocChange = fixLocAnimAfterLocChange,
+                extraJs5Config = extraJs5Config,
                 paramMap = paramMap,
                 contentGroup = contentGroup,
                 internalId = internalId,

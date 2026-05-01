@@ -1,5 +1,6 @@
 package org.rsmod.api.net.rsprot.provider
 
+import com.github.michaelbull.logging.InlineLogger
 import io.netty.channel.ChannelHandlerContext
 import net.rsprot.protocol.api.ChannelExceptionHandler
 import net.rsprot.protocol.api.IncomingGameMessageConsumerExceptionHandler
@@ -9,16 +10,22 @@ import net.rsprot.protocol.message.IncomingGameMessage
 import org.rsmod.game.entity.Player
 
 object ExceptionHandlersProvider {
+    private val logger = InlineLogger()
+
     fun provide(): ExceptionHandlers<Player> {
-        val channelHandler = ChannelExceptionHandler { _: ChannelHandlerContext, cause: Throwable ->
-            throw cause
+        val channelHandler = ChannelExceptionHandler { ctx: ChannelHandlerContext, cause: Throwable ->
+            logger.error(cause) { "Closing RSProt channel after network exception." }
+            ctx.close()
         }
         val messageHandler =
             IncomingGameMessageConsumerExceptionHandler {
-                _: Session<Player>,
-                _: IncomingGameMessage,
+                session: Session<Player>,
+                message: IncomingGameMessage,
                 throwable: Throwable ->
-                throw throwable
+                logger.error(throwable) {
+                    "Closing RSProt session after incoming message exception: $message"
+                }
+                session.requestClose()
             }
         return ExceptionHandlers(channelHandler, messageHandler)
     }

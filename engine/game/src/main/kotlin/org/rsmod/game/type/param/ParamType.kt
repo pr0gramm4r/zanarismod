@@ -53,6 +53,7 @@ public data class UnpackedParamType<T : Any>(
     public val defaultStr: String?,
     public val autoDisable: Boolean,
     public val transmit: Boolean,
+    public val extraJs5Config: ByteArray,
     override var typedDefault: T?,
     override var internalId: Int?,
     override var internalName: String?,
@@ -62,6 +63,7 @@ public data class UnpackedParamType<T : Any>(
         result = 61 * result + (defaultInt?.hashCode() ?: 0)
         result = 61 * result + (defaultStr?.hashCode() ?: 0)
         result = 61 * result + autoDisable.hashCode()
+        result = 61 * result + extraJs5Config.contentHashCode()
         result = 61 * result + (default?.hashCode() ?: 0)
         result = 61 * result + (internalId?.hashCode() ?: 0)
         return result and 0x7FFFFFFFFFFFFFFF
@@ -76,7 +78,8 @@ public data class UnpackedParamType<T : Any>(
             "defaultInt=$defaultInt, " +
             "defaultStr=$defaultStr, " +
             "transmit=$transmit, " +
-            "autoDisable=$autoDisable" +
+            "autoDisable=$autoDisable, " +
+            "extraJs5Config=${extraJs5Config.contentToString()}" +
             ")"
 
     override fun equals(other: Any?): Boolean {
@@ -87,6 +90,7 @@ public data class UnpackedParamType<T : Any>(
         if (defaultStr != other.defaultStr) return false
         if (autoDisable != other.autoDisable) return false
         if (transmit != other.transmit) return false
+        if (!extraJs5Config.contentEquals(other.extraJs5Config)) return false
         if (internalId != other.internalId) return false
         return true
     }

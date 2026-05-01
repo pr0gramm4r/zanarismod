@@ -68,6 +68,9 @@ public object ParamTypeEncoder {
                 data.writeByte(5)
                 data.writeString(it)
             }
+            if (extraJs5Config.isNotEmpty()) {
+                data.writeBytes(extraJs5Config)
+            }
         }
 
     public fun encodeGame(type: UnpackedParamType<*>, data: ByteBuf): Unit =

@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.api.musicPlugin)
     implementation(projects.api.pluginCommons)
     implementation(projects.content.interfaces.gameframe)
 }

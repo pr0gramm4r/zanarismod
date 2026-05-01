@@ -10,6 +10,7 @@ import org.rsmod.api.cache.Js5Archives
 import org.rsmod.api.cache.Js5Configs
 import org.rsmod.api.cache.util.TextUtil
 import org.rsmod.game.type.TypeResolver
+import org.rsmod.game.type.literal.CacheVarLiteral
 import org.rsmod.game.type.param.ParamTypeBuilder
 import org.rsmod.game.type.param.ParamTypeList
 import org.rsmod.game.type.param.UnpackedParamType
@@ -46,8 +47,30 @@ public object ParamTypeDecoder {
                 2 -> defaultInt = data.readInt()
                 4 -> autoDisable = false
                 5 -> defaultStr = data.readString()
+                7 -> preserveExtraJs5Config(data, code) { data.readLong() }
+                8 -> {
+                    val typeId = data.readUnsignedByte().toInt()
+                    typeCharId = CacheVarLiteral[typeId]?.char
+                    if (typeCharId == null) {
+                        extraJs5Config += byteArrayOf(code.toByte(), typeId.toByte())
+                    }
+                }
                 200 -> transmit = false
                 else -> throw IOException("Error unrecognised .param config code: $code")
             }
         }
+
+    private inline fun ParamTypeBuilder<Any>.preserveExtraJs5Config(
+        data: ByteBuf,
+        code: Int,
+        readPayload: () -> Unit,
+    ) {
+        val start = data.readerIndex()
+        readPayload()
+        val length = data.readerIndex() - start
+        val next = extraJs5Config.copyOf(extraJs5Config.size + length + 1)
+        next[extraJs5Config.size] = code.toByte()
+        data.getBytes(start, next, extraJs5Config.size + 1, length)
+        extraJs5Config = next
+    }
 }

@@ -32,6 +32,10 @@ class SettingsSideScript @Inject constructor(private val protectedAccess: Protec
     }
 
     private fun Player.updateIfEvents() {
+        ifSetEvents(setting_components.master_icon, 0..1, IfEvent.Op1)
+        ifSetEvents(setting_components.music_icon, 0..1, IfEvent.Op1)
+        ifSetEvents(setting_components.sound_icon, 0..1, IfEvent.Op1)
+        ifSetEvents(setting_components.areasound_icon, 0..1, IfEvent.Op1)
         ifSetEvents(setting_components.music_bobble_container, 0..21, IfEvent.Op1)
         ifSetEvents(setting_components.sound_bobble_container, 0..21, IfEvent.Op1)
         ifSetEvents(setting_components.areasounds_bobble_container, 0..21, IfEvent.Op1)

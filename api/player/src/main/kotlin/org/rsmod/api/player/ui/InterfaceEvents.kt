@@ -54,6 +54,17 @@ public data class IfOverlayButton(
     override val id: Long = component.packed.toLong()
 }
 
+public data class IfOverlayScriptTrigger(
+    val player: Player,
+    val component: ComponentType,
+    val comsub: Int,
+    val obj: UnpackedObjType?,
+    val crc: Int,
+    val args: List<Any>,
+) : KeyedEvent {
+    override val id: Long = EventBus.composeLongKey(component.packed, crc)
+}
+
 public class IfModalButtonT(
     public val selectedSlot: Int,
     public val selectedObj: UnpackedObjType?,

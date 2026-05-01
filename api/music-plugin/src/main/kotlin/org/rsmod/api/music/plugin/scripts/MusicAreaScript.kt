@@ -9,6 +9,7 @@ import org.rsmod.api.player.music.MusicPlayer
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.vars.enumVarp
 import org.rsmod.api.script.onArea
+import org.rsmod.api.script.onAreaExit
 import org.rsmod.api.script.onPlayerLogin
 import org.rsmod.game.dbtable.DbTableResolver
 import org.rsmod.game.entity.Player
@@ -26,12 +27,17 @@ constructor(private val dbTables: DbTableResolver, private val musicPlayer: Musi
         val scriptAreas = loadScriptAreas()
         for (area in scriptAreas) {
             onArea(area) { playAreaMusic(area) }
+            onAreaExit(area) { stopAreaMusic(area) }
         }
         onPlayerLogin { player.setDefaultModes() }
     }
 
     private fun ProtectedAccess.playAreaMusic(area: AreaType) {
         musicPlayer.enterArea(player, area)
+    }
+
+    private fun ProtectedAccess.stopAreaMusic(area: AreaType) {
+        musicPlayer.exitArea(player, area)
     }
 
     private fun Player.setDefaultModes() {

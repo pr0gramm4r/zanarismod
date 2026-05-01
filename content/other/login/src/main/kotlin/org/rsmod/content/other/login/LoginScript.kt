@@ -9,6 +9,7 @@ import net.rsprot.protocol.game.outgoing.misc.client.ResetAnims
 import net.rsprot.protocol.game.outgoing.misc.player.ChatFilterSettings
 import net.rsprot.protocol.game.outgoing.varp.VarpReset
 import org.rsmod.api.config.refs.varbits
+import org.rsmod.api.config.refs.varps
 import org.rsmod.api.inv.weight.InvWeight
 import org.rsmod.api.player.output.Camera
 import org.rsmod.api.player.output.ChatType
@@ -19,6 +20,7 @@ import org.rsmod.api.player.output.mes
 import org.rsmod.api.player.output.runClientScript
 import org.rsmod.api.player.startInvTransmit
 import org.rsmod.api.player.stat.stat
+import org.rsmod.api.player.vars.VarPlayerIntMapSetter
 import org.rsmod.api.player.vars.boolVarBit
 import org.rsmod.api.player.vars.resyncVar
 import org.rsmod.api.realm.Realm
@@ -29,7 +31,9 @@ import org.rsmod.game.entity.Player
 import org.rsmod.game.entity.player.SessionStateEvent
 import org.rsmod.game.type.obj.ObjTypeList
 import org.rsmod.game.type.stat.StatTypeList
+import org.rsmod.game.type.varbit.VarBitType
 import org.rsmod.game.type.varp.UnpackedVarpType
+import org.rsmod.game.type.varp.VarpType
 import org.rsmod.game.type.varp.VarpTypeList
 import org.rsmod.plugin.scripts.PluginScript
 import org.rsmod.plugin.scripts.ScriptContext
@@ -87,6 +91,7 @@ constructor(
         client.write(VarpReset)
         chatboxUnlocked = displayName.isNotBlank()
         hideRoofs = true
+        setDefaultAudioOptions()
         for (varp in transmitVars) {
             if (varp in vars) {
                 resyncVar(varp)
@@ -94,8 +99,57 @@ constructor(
         }
     }
 
+    private fun Player.setDefaultAudioOptions() {
+        setDefaultVarp(varps.option_master_volume, DEFAULT_AUDIO_VOLUME)
+        setDefaultVarp(varps.option_music, DEFAULT_AUDIO_VOLUME)
+        setDefaultVarp(varps.option_sounds, DEFAULT_AUDIO_VOLUME)
+        setDefaultVarp(varps.option_areasounds, DEFAULT_AUDIO_VOLUME)
+        setDefaultDesktopAudioOptions()
+        setUnmuteAudioSavedOptions()
+    }
+
+    private fun Player.setDefaultDesktopAudioOptions() {
+        val desktopAudio = varbits.option_master_volume_desktop.baseVar
+        if (desktopAudio !in vars) {
+            setVarBit(varbits.option_master_volume_desktop, DEFAULT_AUDIO_VOLUME)
+            setVarBit(varbits.option_music_desktop, DEFAULT_AUDIO_VOLUME)
+            setVarBit(varbits.option_master_volume_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+            setVarBit(varbits.option_music_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+        }
+
+        val desktopEffects = varbits.option_sounds_desktop.baseVar
+        if (desktopEffects !in vars) {
+            setVarBit(varbits.option_sounds_desktop, DEFAULT_AUDIO_VOLUME)
+            setVarBit(varbits.option_areasounds_desktop, DEFAULT_AUDIO_VOLUME)
+            setVarBit(varbits.option_sounds_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+            setVarBit(varbits.option_areasounds_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+        }
+    }
+
+    private fun Player.setUnmuteAudioSavedOptions() {
+        setVarBit(varbits.option_master_volume_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_music_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_sounds_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_areasounds_saved_desktop, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_master_volume_saved, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_music_saved, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_sounds_saved, DEFAULT_UNMUTE_VOLUME)
+        setVarBit(varbits.option_areasounds_saved, DEFAULT_UNMUTE_VOLUME)
+    }
+
+    private fun Player.setDefaultVarp(varp: VarpType, value: Int) {
+        if (varp !in vars) {
+            VarPlayerIntMapSetter.set(this, varp, value)
+        }
+    }
+
+    private fun Player.setVarBit(varbit: VarBitType, value: Int) {
+        VarPlayerIntMapSetter.set(this, varbit, value)
+    }
+
     private fun Player.sendLowPriority() {
         sendInvs()
+        runClientScript(LOGIN_CLIENTSCRIPT)
         runClientScript(2498, 1, 0, 0)
         resetCam()
         runClientScript(828, 1)
@@ -143,5 +197,16 @@ constructor(
 
     private fun transmitVars(): List<UnpackedVarpType> {
         return varpTypes.filterTransmitKeys().sorted().map(varpTypes::getValue)
+    }
+
+    private companion object {
+        /**
+         * Initializes rev237 camera zoom bounds. Without this, mouse-wheel camera zoom clamps
+         * against zeroed client varcs and appears disabled.
+         */
+        private const val LOGIN_CLIENTSCRIPT = 626
+
+        private const val DEFAULT_AUDIO_VOLUME = 100
+        private const val DEFAULT_UNMUTE_VOLUME = 5
     }
 }

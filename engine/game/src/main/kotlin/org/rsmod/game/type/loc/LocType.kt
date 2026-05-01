@@ -87,6 +87,7 @@ public data class UnpackedLocType(
     public val mapIcon: Int,
     public val randomAnimFrame: Boolean,
     public val fixLocAnimAfterLocChange: Boolean,
+    public val extraJs5Config: ByteArray,
     public val paramMap: ParamMap?,
     public val contentGroup: Int,
     override var internalId: Int?,
@@ -190,6 +191,7 @@ public data class UnpackedLocType(
             "mapIcon=$mapIcon, " +
             "randomAnimFrame=$randomAnimFrame, " +
             "fixLocAnimAfterLocChange=$fixLocAnimAfterLocChange, " +
+            "extraJs5Config=${extraJs5Config.contentToString()}, " +
             "params=$paramMap" +
             ")"
 
@@ -246,6 +248,7 @@ public data class UnpackedLocType(
         if (mapIcon != other.mapIcon) return false
         if (randomAnimFrame != other.randomAnimFrame) return false
         if (fixLocAnimAfterLocChange != other.fixLocAnimAfterLocChange) return false
+        if (!extraJs5Config.contentEquals(other.extraJs5Config)) return false
         if (paramMap != other.paramMap) return false
         if (contentGroup != other.contentGroup) return false
         if (internalId != other.internalId) return false
@@ -303,6 +306,7 @@ public data class UnpackedLocType(
         result = 31 * result + mapIcon
         result = 31 * result + randomAnimFrame.hashCode()
         result = 31 * result + fixLocAnimAfterLocChange.hashCode()
+        result = 31 * result + extraJs5Config.contentHashCode()
         result = 31 * result + (paramMap?.hashCode() ?: 0)
         result = 31 * result + contentGroup
         result = 31 * result + (internalId ?: 0)

@@ -96,6 +96,7 @@ public data class UnpackedObjType(
     public val boughttemplate: Int,
     public val placeholderlink: Int,
     public val placeholdertemplate: Int,
+    public val extraJs5Config: ByteArray,
     public val paramMap: ParamMap?,
     public val generateCertificate: Boolean,
     public val generatePlaceholder: Boolean,
@@ -286,6 +287,7 @@ public data class UnpackedObjType(
             "placeholdertemplate=$placeholdertemplate, " +
             "transformlink=$transformlink, " +
             "transformtemplate=$transformtemplate, " +
+            "extraJs5Config=${extraJs5Config.contentToString()}, " +
             "params=$paramMap, " +
             "generateCertificate=$generateCertificate, " +
             "generatePlaceholder=$generatePlaceholder, " +
@@ -361,6 +363,7 @@ public data class UnpackedObjType(
         if (boughttemplate != other.boughttemplate) return false
         if (placeholderlink != other.placeholderlink) return false
         if (placeholdertemplate != other.placeholdertemplate) return false
+        if (!extraJs5Config.contentEquals(other.extraJs5Config)) return false
         if (paramMap != other.paramMap) return false
         if (generateCertificate != other.generateCertificate) return false
         if (generatePlaceholder != other.generatePlaceholder) return false
@@ -440,6 +443,7 @@ public data class UnpackedObjType(
         result = 31 * result + boughttemplate
         result = 31 * result + placeholderlink
         result = 31 * result + placeholdertemplate
+        result = 31 * result + extraJs5Config.contentHashCode()
         result = 31 * result + (paramMap?.hashCode() ?: 0)
         result = 31 * result + generateCertificate.hashCode()
         result = 31 * result + generatePlaceholder.hashCode()

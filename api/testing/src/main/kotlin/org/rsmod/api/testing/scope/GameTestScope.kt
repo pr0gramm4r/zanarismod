@@ -363,52 +363,52 @@ constructor(
     }
 
     public fun Player.opLoc1(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 1)
+        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 1, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc2(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 2)
+        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 2, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc3(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 3)
+        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 3, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc4(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 4)
+        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 4, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opLoc5(loc: BoundLocInfo, controlKey: Boolean = false) {
-        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 5)
+        val message = OpLoc(loc.id, loc.x, loc.z, controlKey, op = 5, subop = 0)
         captureClient.queue(opLocHandler, message)
     }
 
     public fun Player.opNpc1(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 1)
+        val message = OpNpc(npc.slotId, controlKey, op = 1, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc2(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 2)
+        val message = OpNpc(npc.slotId, controlKey, op = 2, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc3(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 3)
+        val message = OpNpc(npc.slotId, controlKey, op = 3, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc4(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 4)
+        val message = OpNpc(npc.slotId, controlKey, op = 4, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 
     public fun Player.opNpc5(npc: Npc, controlKey: Boolean = false) {
-        val message = OpNpc(npc.slotId, controlKey, op = 5)
+        val message = OpNpc(npc.slotId, controlKey, op = 5, subop = 0)
         captureClient.queue(opNpcHandler, message)
     }
 

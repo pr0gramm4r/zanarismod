@@ -6,7 +6,6 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.michaelbull.logging.InlineLogger
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -101,8 +100,11 @@ class GameServerCacheDownloader : CliktCommand(name = "cache-download") {
                     "`xteaUrl` parameter not set. " +
                         "Searching for `xteas.json` file in cache archive instead..."
                 }
-                retrieveXteaFileFromCacheDir(cacheArchiveDir, output)
-                logger.info { "Retrieved `xteas.json` file and placed into: $output" }
+                if (retrieveXteaFileFromCacheDir(cacheArchiveDir, output)) {
+                    logger.info { "Retrieved `xteas.json` file and placed into: $output" }
+                } else {
+                    logger.info { "No `xteas.json` file found; continuing without XTEA keys." }
+                }
             }
             xteaUrl.endsWith(".json") -> {
                 logger.info { "Downloading xtea file from: $xteaUrl" }
@@ -115,16 +117,11 @@ class GameServerCacheDownloader : CliktCommand(name = "cache-download") {
             }
         }
 
-    private fun retrieveXteaFileFromCacheDir(cacheDir: Path, outputDir: Path) {
+    private fun retrieveXteaFileFromCacheDir(cacheDir: Path, outputDir: Path): Boolean {
         val files = cacheDir.listDirectoryEntries()
-        val xtea = files.firstOrNull { it.name == "xteas.json" }
-        if (xtea == null) {
-            throw FileNotFoundException(
-                "`xteas.json` file could not be found in cache archive. " +
-                    "`xteaUrl` program parameter must be set."
-            )
-        }
+        val xtea = files.firstOrNull { it.name == "xteas.json" } ?: return false
         xtea.moveTo(outputDir, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
+        return true
     }
 
     private fun downloadXteaFile(client: OkHttpClient, xteaUrl: String, outputFile: Path) {

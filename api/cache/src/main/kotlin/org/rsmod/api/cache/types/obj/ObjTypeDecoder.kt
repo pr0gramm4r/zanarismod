@@ -113,6 +113,23 @@ public object ObjTypeDecoder {
                         else -> throw NotImplementedError("Unhandled isubop parent op: $op")
                     }
                 }
+                44 -> model = data.readInt()
+                45 -> {
+                    manwear = data.readInt()
+                    manwearOff = data.readUnsignedByte().toInt()
+                }
+                46 -> manwear2 = data.readInt()
+                47 -> manwear3 = data.readInt()
+                48 -> {
+                    womanwear = data.readInt()
+                    womanwearOff = data.readUnsignedByte().toInt()
+                }
+                49 -> womanwear2 = data.readInt()
+                50 -> womanwear3 = data.readInt()
+                51 -> manhead = data.readInt()
+                52 -> manhead2 = data.readInt()
+                53 -> womanhead = data.readInt()
+                54 -> womanhead2 = data.readInt()
                 65 -> stockmarket = true
                 75 -> weight = data.readShort().toInt()
                 78 -> manwear3 = data.readUnsignedShort()
@@ -140,15 +157,33 @@ public object ObjTypeDecoder {
                 148 -> placeholderlink = data.readUnsignedShort()
                 149 -> placeholdertemplate = data.readUnsignedShort()
                 200 -> {
-                    val count = data.readUnsignedByte().toInt()
-                    val objvar = IntArray(count)
-                    for (i in objvar.indices) {
-                        objvar[i] = data.readUnsignedShort()
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedByte()
+                        data.readString()
                     }
-                    this.objvar = CompactableIntArray(objvar)
                 }
-                201 -> playerCost = data.readInt()
-                202 -> playerCostDerived = data.readInt()
+                201 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readInt()
+                        data.readInt()
+                        data.readString()
+                    }
+                }
+                202 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readInt()
+                        data.readInt()
+                        data.readString()
+                    }
+                }
                 203 -> playerCostDerivedConst = data.readInt()
                 204 -> stockMarketBuyLimit = data.readUnsignedShort()
                 205 -> stockMarketRecalcUsers = data.readUnsignedShort()
@@ -163,4 +198,18 @@ public object ObjTypeDecoder {
                 else -> throw IOException("Error unrecognised .obj config code: $code")
             }
         }
+
+    private inline fun ObjTypeBuilder.preserveExtraJs5Config(
+        data: ByteBuf,
+        code: Int,
+        readPayload: () -> Unit,
+    ) {
+        val start = data.readerIndex()
+        readPayload()
+        val length = data.readerIndex() - start
+        val next = extraJs5Config.copyOf(extraJs5Config.size + length + 1)
+        next[extraJs5Config.size] = code.toByte()
+        data.getBytes(start, next, extraJs5Config.size + 1, length)
+        extraJs5Config = next
+    }
 }

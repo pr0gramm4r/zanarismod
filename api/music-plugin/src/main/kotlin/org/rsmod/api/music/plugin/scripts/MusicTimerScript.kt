@@ -2,11 +2,9 @@ package org.rsmod.api.music.plugin.scripts
 
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.varbits
-import org.rsmod.api.config.refs.varps
 import org.rsmod.api.music.plugin.configs.music_timers
 import org.rsmod.api.player.music.MusicPlayer
 import org.rsmod.api.player.vars.intVarBit
-import org.rsmod.api.player.vars.intVarp
 import org.rsmod.api.script.onPlayerLogin
 import org.rsmod.api.script.onPlayerSoftTimer
 import org.rsmod.game.entity.Player
@@ -15,7 +13,8 @@ import org.rsmod.plugin.scripts.ScriptContext
 
 public class MusicTimerScript @Inject constructor(private val musicPlayer: MusicPlayer) :
     PluginScript() {
-    private val Player.musicVolume by intVarp(varps.option_music)
+    private val Player.masterVolume by intVarBit(varbits.option_master_volume_desktop)
+    private val Player.musicVolume by intVarBit(varbits.option_music_desktop)
     private var Player.currMusicId by intVarBit(varbits.music_curr_id)
     private var Player.musicClock by intVarBit(varbits.music_curr_clocks)
     private var Player.musicDuration by intVarBit(varbits.music_curr_duration)
@@ -23,6 +22,7 @@ public class MusicTimerScript @Inject constructor(private val musicPlayer: Music
     override fun ScriptContext.startup() {
         onPlayerLogin { player.musicLogin() }
         onPlayerSoftTimer(music_timers.sync) { player.musicSync() }
+        onPlayerSoftTimer(music_timers.resume) { player.musicResume() }
     }
 
     private fun Player.musicLogin() {
@@ -58,7 +58,14 @@ public class MusicTimerScript @Inject constructor(private val musicPlayer: Music
         }
     }
 
+    private fun Player.musicResume() {
+        if (isMusicMuted()) {
+            return
+        }
+        musicPlayer.enable(this)
+    }
+
     private fun Player.isMusicMuted(): Boolean {
-        return musicVolume == 0
+        return masterVolume == 0 || musicVolume == 0
     }
 }

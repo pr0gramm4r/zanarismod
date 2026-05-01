@@ -7,4 +7,5 @@ public typealias music_timers = MusicTimers
 
 public object MusicTimers : TimerReferences() {
     public val sync: TimerType = find("music_sync")
+    public val resume: TimerType = find("music_resume")
 }

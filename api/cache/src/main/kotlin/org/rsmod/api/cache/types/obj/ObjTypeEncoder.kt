@@ -50,8 +50,12 @@ public object ObjTypeEncoder {
     public fun encodeJs5(type: UnpackedObjType, data: ByteBuf, ctx: EncoderContext): Unit =
         with(type) {
             if (model != 0) {
-                data.writeByte(1)
-                data.writeShort(model)
+                data.writeByte(if (model > UShort.MAX_VALUE.toInt()) 44 else 1)
+                if (model > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(model)
+                } else {
+                    data.writeShort(model)
+                }
             }
 
             if (name.isNotBlank()) {
@@ -113,25 +117,41 @@ public object ObjTypeEncoder {
             }
 
             if (manwear != ObjTypeBuilder.DEFAULT_MANWEAR) {
-                data.writeByte(23)
-                data.writeShort(manwear)
+                data.writeByte(if (manwear > UShort.MAX_VALUE.toInt()) 45 else 23)
+                if (manwear > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(manwear)
+                } else {
+                    data.writeShort(manwear)
+                }
                 data.writeByte(manwearOff)
             }
 
             if (manwear2 != ObjTypeBuilder.DEFAULT_MANWEAR2) {
-                data.writeByte(24)
-                data.writeShort(manwear2)
+                data.writeByte(if (manwear2 > UShort.MAX_VALUE.toInt()) 46 else 24)
+                if (manwear2 > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(manwear2)
+                } else {
+                    data.writeShort(manwear2)
+                }
             }
 
             if (womanwear != ObjTypeBuilder.DEFAULT_WOMANWEAR) {
-                data.writeByte(25)
-                data.writeShort(womanwear)
+                data.writeByte(if (womanwear > UShort.MAX_VALUE.toInt()) 48 else 25)
+                if (womanwear > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(womanwear)
+                } else {
+                    data.writeShort(womanwear)
+                }
                 data.writeByte(womanwearOff)
             }
 
             if (womanwear2 != ObjTypeBuilder.DEFAULT_WOMANWEAR2) {
-                data.writeByte(26)
-                data.writeShort(womanwear2)
+                data.writeByte(if (womanwear2 > UShort.MAX_VALUE.toInt()) 49 else 26)
+                if (womanwear2 > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(womanwear2)
+                } else {
+                    data.writeShort(womanwear2)
+                }
             }
 
             if (wearpos3 != ObjTypeBuilder.DEFAULT_WEARPOS3) {
@@ -197,33 +217,57 @@ public object ObjTypeEncoder {
             }
 
             if (manwear3 != ObjTypeBuilder.DEFAULT_MANWEAR3) {
-                data.writeByte(78)
-                data.writeShort(manwear3)
+                data.writeByte(if (manwear3 > UShort.MAX_VALUE.toInt()) 47 else 78)
+                if (manwear3 > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(manwear3)
+                } else {
+                    data.writeShort(manwear3)
+                }
             }
 
             if (womanwear3 != ObjTypeBuilder.DEFAULT_WOMANWEAR3) {
-                data.writeByte(79)
-                data.writeShort(womanwear3)
+                data.writeByte(if (womanwear3 > UShort.MAX_VALUE.toInt()) 50 else 79)
+                if (womanwear3 > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(womanwear3)
+                } else {
+                    data.writeShort(womanwear3)
+                }
             }
 
             if (manhead != ObjTypeBuilder.DEFAULT_MANHEAD) {
-                data.writeByte(90)
-                data.writeShort(manhead)
+                data.writeByte(if (manhead > UShort.MAX_VALUE.toInt()) 51 else 90)
+                if (manhead > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(manhead)
+                } else {
+                    data.writeShort(manhead)
+                }
             }
 
             if (womanhead != ObjTypeBuilder.DEFAULT_WOMANHEAD) {
-                data.writeByte(91)
-                data.writeShort(womanhead)
+                data.writeByte(if (womanhead > UShort.MAX_VALUE.toInt()) 53 else 91)
+                if (womanhead > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(womanhead)
+                } else {
+                    data.writeShort(womanhead)
+                }
             }
 
             if (manhead2 != ObjTypeBuilder.DEFAULT_MANHEAD2) {
-                data.writeByte(92)
-                data.writeShort(manhead2)
+                data.writeByte(if (manhead2 > UShort.MAX_VALUE.toInt()) 52 else 92)
+                if (manhead2 > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(manhead2)
+                } else {
+                    data.writeShort(manhead2)
+                }
             }
 
             if (womanhead2 != ObjTypeBuilder.DEFAULT_WOMANHEAD2) {
-                data.writeByte(93)
-                data.writeShort(womanhead2)
+                data.writeByte(if (womanhead2 > UShort.MAX_VALUE.toInt()) 54 else 93)
+                if (womanhead2 > UShort.MAX_VALUE.toInt()) {
+                    data.writeInt(womanhead2)
+                } else {
+                    data.writeShort(womanhead2)
+                }
             }
 
             if (category != ObjTypeBuilder.DEFAULT_CATEGORY) {
@@ -305,6 +349,10 @@ public object ObjTypeEncoder {
             if (placeholdertemplate != 0) {
                 data.writeByte(149)
                 data.writeShort(placeholdertemplate)
+            }
+
+            if (extraJs5Config.isNotEmpty()) {
+                data.writeBytes(extraJs5Config)
             }
 
             val params = paramMap?.filterTransmit(ctx)?.primitiveMap

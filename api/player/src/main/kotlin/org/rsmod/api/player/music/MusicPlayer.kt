@@ -85,6 +85,22 @@ internal constructor(
         play(player, music)
     }
 
+    public fun enable(player: Player) {
+        val current = repo.forId(player.currMusicId)
+        if (current != null) {
+            player.currMusicId = 0 // Sends the midi song without fading.
+            play(player, current)
+            return
+        }
+
+        val previous = repo.forId(player.lastMusicId)
+        if (previous != null) {
+            play(player, previous)
+        } else {
+            playNext(player)
+        }
+    }
+
     public fun stop(player: Player) {
         player.lastMusicId = player.currMusicId
         player.currMusicId = 0
@@ -93,6 +109,17 @@ internal constructor(
         player.midiSong(midis.stop_music, fadeOutSpeed = MUSIC_END_FADE)
         if (player.playMode == MusicPlayMode.Manual) {
             setEmptyMusicText(player)
+        }
+    }
+
+    public fun exitArea(player: Player, area: AreaType) {
+        if (player.currMusicArea != area.id + 1) {
+            return
+        }
+        player.currMusicArea = 0
+        player.musicPlaylist = 0
+        if (player.playMode == MusicPlayMode.Area) {
+            stop(player)
         }
     }
 

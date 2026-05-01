@@ -3,6 +3,7 @@ package org.rsmod.game.type.param
 import kotlin.reflect.KClass
 import org.rsmod.game.type.literal.CacheVarLiteral
 import org.rsmod.game.type.util.GenericPropertySelector.select
+import org.rsmod.game.type.util.GenericPropertySelector.selectByteArray
 import org.rsmod.game.type.util.MergeableCacheBuilder
 
 @DslMarker private annotation class ParamBuilderDsl
@@ -18,6 +19,7 @@ public class ParamTypeBuilder<T : Any>(
     public var autoDisable: Boolean? = null
     public var typedDefault: T? = null
     public var transmit: Boolean? = null
+    public var extraJs5Config: ByteArray = ByteArray(0)
 
     public fun build(id: Int): UnpackedParamType<T> {
         val internal = checkNotNull(internal) { "`internal` must be set." }
@@ -31,6 +33,7 @@ public class ParamTypeBuilder<T : Any>(
             defaultStr = defaultStr,
             autoDisable = autoDisable,
             transmit = transmit,
+            extraJs5Config = extraJs5Config,
             typedDefault = typedDefault,
             internalId = id,
             internalName = internal,
@@ -51,6 +54,7 @@ public class ParamTypeBuilder<T : Any>(
             val defaultStr = select(edit, base, default = null) { defaultStr }
             val autoDisable = select(edit, base, DEFAULT_AUTO_DISABLE) { autoDisable }
             val transmit = select(edit, base, DEFAULT_TRANSMIT) { transmit }
+            val extraJs5Config = selectByteArray(edit, base) { extraJs5Config }
             val internalId = select(edit, base, default = null) { internalId }
             val internalName = select(edit, base, default = null) { internalName }
             return UnpackedParamType(
@@ -60,6 +64,7 @@ public class ParamTypeBuilder<T : Any>(
                 defaultStr = defaultStr,
                 autoDisable = autoDisable,
                 transmit = transmit,
+                extraJs5Config = extraJs5Config,
                 typedDefault = null,
                 internalId = internalId,
                 internalName = internalName,

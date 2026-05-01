@@ -9,6 +9,7 @@ import org.rsmod.api.player.ui.IfOpenSub
 import org.rsmod.api.player.ui.IfOverlayButton
 import org.rsmod.api.player.ui.IfOverlayButtonT
 import org.rsmod.api.player.ui.IfOverlayDrag
+import org.rsmod.api.player.ui.IfOverlayScriptTrigger
 import org.rsmod.events.EventBus
 import org.rsmod.game.type.comp.ComponentType
 import org.rsmod.game.type.interf.InterfaceType
@@ -24,6 +25,15 @@ public fun ScriptContext.onIfOverlayButton(
     button: ComponentType,
     action: IfOverlayButton.() -> Unit,
 ): Unit = onEvent(button.packed, action)
+
+public fun ScriptContext.onIfOverlayScriptTrigger(
+    component: ComponentType,
+    crc: Int,
+    action: IfOverlayScriptTrigger.() -> Unit,
+) {
+    val packed = EventBus.composeLongKey(component.packed, crc)
+    onEvent(packed, action)
+}
 
 public fun ScriptContext.onIfModalButton(
     button: ComponentType,

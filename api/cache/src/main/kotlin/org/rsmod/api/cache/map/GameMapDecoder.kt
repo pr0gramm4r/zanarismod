@@ -2,6 +2,7 @@ package org.rsmod.api.cache.map
 
 import io.netty.buffer.ByteBuf
 import jakarta.inject.Inject
+import java.io.FileNotFoundException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -81,16 +82,69 @@ constructor(
         }
 
     private fun Cache.readMapBuffers(xteaMap: XteaMap): List<MapBuffer> =
-        xteaMap.map { (mapSquareKey, keyArray) ->
-            val name = "${mapSquareKey.x}_${mapSquareKey.z}"
-            val key = SymmetricKey.fromIntArray(keyArray)
-            val map = read(Js5Archives.MAPS, "m$name", file = 0).use(ByteBuf::toInlineBuf)
-            val locs = read(Js5Archives.MAPS, "l$name", file = 0, key).use(ByteBuf::toInlineBuf)
-            val npcs = readOrNull(Js5Archives.MAPS, "n$name")?.use(ByteBuf::toInlineBuf)
-            val objs = readOrNull(Js5Archives.MAPS, "o$name")?.use(ByteBuf::toInlineBuf)
-            val areas = readOrNull(Js5Archives.MAPS, "a$name")?.use(ByteBuf::toInlineBuf)
-            MapBuffer(mapSquareKey, map, locs, npcs, objs, areas)
+        when {
+            xteaMap.isNotEmpty() -> {
+                xteaMap.mapNotNull { (mapSquareKey, keyArray) ->
+                    readMapBufferOrNull(mapSquareKey, SymmetricKey.fromIntArray(keyArray))
+                }
+            }
+            else -> {
+                findMapSquares().mapNotNull { mapSquareKey -> readMapBufferOrNull(mapSquareKey) }
+            }
         }
+
+    private fun Cache.findMapSquares(): List<MapSquareKey> = buildList {
+        for (group in list(Js5Archives.MAPS)) {
+            val unnamedGroup = group.nameHash == -1
+            val validMapSquareId = group.id in 0..0xFFFF
+            if (unnamedGroup && validMapSquareId && hasMapSquareTerrain(group.id)) {
+                add(MapSquareKey(group.id))
+            }
+        }
+    }
+
+    private fun Cache.hasMapSquareTerrain(group: Int): Boolean {
+        val map =
+            try {
+                read(Js5Archives.MAPS, group, file = 0)
+            } catch (_: FileNotFoundException) {
+                return false
+            }
+        return map.use { it.readableBytes() >= MIN_MAP_TERRAIN_BYTES }
+    }
+
+    private fun Cache.readMapBufferOrNull(
+        mapSquareKey: MapSquareKey,
+        key: SymmetricKey = SymmetricKey.ZERO,
+    ): MapBuffer? {
+        val name = "${mapSquareKey.x}_${mapSquareKey.z}"
+        val map = readMapSquareOrNull(mapSquareKey, "m$name", file = 0) ?: return null
+        val locs = readMapSquareOrNull(mapSquareKey, "l$name", file = 1, key)
+        val npcs = readOrNull(Js5Archives.MAPS, "n$name")?.use(ByteBuf::toInlineBuf)
+        val objs = readOrNull(Js5Archives.MAPS, "o$name")?.use(ByteBuf::toInlineBuf)
+        val areas = readOrNull(Js5Archives.MAPS, "a$name")?.use(ByteBuf::toInlineBuf)
+        return MapBuffer(mapSquareKey, map, locs, npcs, objs, areas)
+    }
+
+    private fun Cache.readMapSquareOrNull(
+        mapSquareKey: MapSquareKey,
+        namedGroup: String,
+        file: Int,
+        key: SymmetricKey = SymmetricKey.ZERO,
+    ): InlineByteBuf? {
+        val archive = Js5Archives.MAPS
+        val packed = mapSquareKey.id
+        val packedBuffer =
+            try {
+                read(archive, packed, file, key)
+            } catch (_: FileNotFoundException) {
+                null
+            }
+        if (packedBuffer != null) {
+            return packedBuffer.use(ByteBuf::toInlineBuf)
+        }
+        return readOrNull(archive, namedGroup, file = 0, key)?.use(ByteBuf::toInlineBuf)
+    }
 
     private suspend fun decodeAll(buffers: List<MapBuffer>): List<DecodedMap> = coroutineScope {
         buffers.map { buffer -> async { buffer.decode() } }.awaitAll()
@@ -109,7 +163,7 @@ constructor(
 
     private fun putSpawns(builder: GameMapBuilder, decodedMaps: List<DecodedMap>) {
         for (decoded in decodedMaps) {
-            putLocs(builder, collision, locTypes, decoded.key, decoded.map, decoded.locs)
+            decoded.locs?.let { putLocs(builder, collision, locTypes, decoded.key, decoded.map, it) }
             decoded.npcs?.let { putNpcs(npcRepo, npcTypes, decoded.key, it) }
             decoded.objs?.let { putObjs(objRepo, objTypes, decoded.key, it) }
         }
@@ -285,33 +339,40 @@ constructor(
 private class MapBuffer(
     val key: MapSquareKey,
     val map: InlineByteBuf,
-    val locs: InlineByteBuf,
+    val locs: InlineByteBuf?,
     val npcs: InlineByteBuf?,
     val objs: InlineByteBuf?,
     val areas: InlineByteBuf?,
 ) {
-    suspend fun decode(): DecodedMap = coroutineScope {
-        val mapDef = async { MapTileDecoder.decode(map) }
-        val locDef = async { MapLocListDecoder.decode(locs) }
-        val npcDef = if (npcs != null) async { MapNpcListDecoder.decode(npcs) } else null
-        val objDef = if (objs != null) async { MapObjListDecoder.decode(objs) } else null
-        val areaDef = if (areas != null) async { MapAreaDecoder.decode(areas) } else null
-        DecodedMap(
-            key = key,
-            map = mapDef.await(),
-            locs = locDef.await(),
-            npcs = npcDef?.await(),
-            objs = objDef?.await(),
-            areas = areaDef?.await(),
-        )
-    }
+    suspend fun decode(): DecodedMap =
+        try {
+            coroutineScope {
+                val mapDef = async { MapTileDecoder.decode(map) }
+                val locDef = if (locs != null) async { MapLocListDecoder.decode(locs) } else null
+                val npcDef = if (npcs != null) async { MapNpcListDecoder.decode(npcs) } else null
+                val objDef = if (objs != null) async { MapObjListDecoder.decode(objs) } else null
+                val areaDef = if (areas != null) async { MapAreaDecoder.decode(areas) } else null
+                DecodedMap(
+                    key = key,
+                    map = mapDef.await(),
+                    locs = locDef?.await(),
+                    npcs = npcDef?.await(),
+                    objs = objDef?.await(),
+                    areas = areaDef?.await(),
+                )
+            }
+        } catch (e: Exception) {
+            throw IllegalStateException("Failed to decode map square: $key", e)
+        }
 }
 
 private data class DecodedMap(
     val key: MapSquareKey,
     val map: MapTileSimpleDefinition,
-    val locs: MapLocListDefinition,
+    val locs: MapLocListDefinition?,
     val npcs: MapNpcListDefinition?,
     val objs: MapObjListDefinition?,
     val areas: MapAreaDefinition?,
 )
+
+private const val MIN_MAP_TERRAIN_BYTES = MapSquareGrid.LENGTH * MapSquareGrid.LENGTH

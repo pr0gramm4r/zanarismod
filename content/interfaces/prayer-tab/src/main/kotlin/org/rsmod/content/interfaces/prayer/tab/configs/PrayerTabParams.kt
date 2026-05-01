@@ -9,11 +9,11 @@ import org.rsmod.game.type.varbit.VarBitType
 internal typealias prayer_params = PrayerTabParams
 
 object PrayerTabParams : ParamReferences() {
-    val id = find<Int>("prayer_id", 88673346945)
-    val component = find<ComponentType>("prayer_component", 61646266434)
-    val name = find<String>("prayer_name", 9222941699801316537)
-    val level = find<Int>("prayer_levelreq", 29733805813656036)
-    val sound = find<SynthType>("prayer_sound", 67558440545)
+    val id = find<Int>("prayer_id", 5409074129566)
+    val component = find<ComponentType>("prayer_component", 3760422151135)
+    val name = find<String>("prayer_name", 9197121476593658878)
+    val level = find<Int>("prayer_levelreq", 1813762154632916737)
+    val sound = find<SynthType>("prayer_sound", 4121064771666)
     val varbit = find<VarBitType>("prayer_varbit")
     val overhead = find<Int>("prayer_overhead")
     val unlock_varbit = find<VarBitType>("prayer_unlock_varbit")

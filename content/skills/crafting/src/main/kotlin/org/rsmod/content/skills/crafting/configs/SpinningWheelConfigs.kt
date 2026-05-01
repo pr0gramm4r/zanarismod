@@ -70,7 +70,7 @@ object SpinningLocs : LocReferences() {
 }
 
 object SpinningSeqs : SeqReferences() {
-    val human_spinningwheel = find("human_spinningwheel")
+    val human_spinningwheel = find("human_spinningwheel_90")
 }
 
 object SpinningVarps : VarpReferences() {

@@ -30,4 +30,6 @@ internal object MusicVarps : VarpReferences() {
     val multi_23 = find("musicmulti_23")
     val multi_24 = find("musicmulti_24")
     val multi_25 = find("musicmulti_25")
+    val multi_26 = find("musicmulti_26")
+    val multi_27 = find("musicmulti_27")
 }

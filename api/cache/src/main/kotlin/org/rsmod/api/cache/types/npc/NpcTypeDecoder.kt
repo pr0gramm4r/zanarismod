@@ -104,6 +104,18 @@ public object NpcTypeDecoder {
                     repeat(count) { models[it] = data.readUnsignedShort() }
                     this.head = CompactableIntArray(models)
                 }
+                61 -> {
+                    val count = data.readUnsignedByte().toInt()
+                    val models = IntArray(count)
+                    repeat(count) { models[it] = data.readInt() }
+                    this.models = CompactableIntArray(models)
+                }
+                62 -> {
+                    val count = data.readUnsignedByte().toInt()
+                    val models = IntArray(count)
+                    repeat(count) { models[it] = data.readInt() }
+                    this.head = CompactableIntArray(models)
+                }
                 74 -> attack = data.readUnsignedShort()
                 75 -> defence = data.readUnsignedShort()
                 76 -> strength = data.readUnsignedShort()
@@ -160,6 +172,7 @@ public object NpcTypeDecoder {
                 }
                 107 -> active = false
                 109 -> rotationFlag = false
+                111 -> preserveExtraJs5Config(data, code) {}
                 114 -> runAnim = data.readUnsignedShort()
                 115 -> {
                     runAnim = data.readUnsignedShort()
@@ -177,6 +190,12 @@ public object NpcTypeDecoder {
                 122 -> follower = true
                 123 -> lowPriorityOps = true
                 124 -> overlayHeight = data.readUnsignedShort()
+                126 -> preserveExtraJs5Config(data, code) { data.readUnsignedShort() }
+                129,
+                130,
+                145,
+                147 -> preserveExtraJs5Config(data, code) {}
+                146 -> preserveExtraJs5Config(data, code) { data.readUnsignedShort() }
                 200 -> {
                     val id = data.readUnsignedByte().toInt()
                     moveRestrict = MoveRestrict.entries.first { it.id == id }
@@ -218,7 +237,49 @@ public object NpcTypeDecoder {
                 215 -> regenRate = data.readUnsignedShort()
                 216 -> huntMode = data.readUnsignedShortOrNull()
                 249 -> paramMap = ParamMap(data.readRawParams())
+                251 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedByte()
+                        data.readString()
+                    }
+                }
+                252 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readInt()
+                        data.readInt()
+                        data.readString()
+                    }
+                }
+                253 -> {
+                    preserveExtraJs5Config(data, code) {
+                        data.readUnsignedByte()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readUnsignedShort()
+                        data.readInt()
+                        data.readInt()
+                        data.readString()
+                    }
+                }
                 else -> throw IOException("Error unrecognised .npc config code: $code")
             }
         }
+
+    private inline fun NpcTypeBuilder.preserveExtraJs5Config(
+        data: ByteBuf,
+        code: Int,
+        readPayload: () -> Unit,
+    ) {
+        val start = data.readerIndex()
+        readPayload()
+        val length = data.readerIndex() - start
+        val next = extraJs5Config.copyOf(extraJs5Config.size + length + 1)
+        next[extraJs5Config.size] = code.toByte()
+        data.getBytes(start, next, extraJs5Config.size + 1, length)
+        extraJs5Config = next
+    }
 }

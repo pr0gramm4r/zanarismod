@@ -44,7 +44,8 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
         for (spellbookEnum in spellbookList.values) {
             val spellList = enumResolver[spellbookEnum].filterValuesNotNull()
             for (spellObj in spellList.values) {
-                spells[spellObj.id] = spellObj.toMagicSpell()
+                val spell = spellObj.toMagicSpellOrNull() ?: continue
+                spells[spellObj.id] = spell
             }
         }
 
@@ -64,8 +65,9 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
         return spells
     }
 
-    private fun ObjType.toMagicSpell(): MagicSpell {
+    private fun ObjType.toMagicSpellOrNull(): MagicSpell? {
         val unpacked = objTypes[this]
+        val experience = unpacked.paramOrNull(params.spell_castxp) ?: return null
 
         // Some spells can have a default (-1) spellbook, such as `teleport_to_target_spell`.
         val spellbookId = unpacked.param(params.spell_spellbook)
@@ -80,9 +82,6 @@ constructor(private val objTypes: ObjTypeList, private val enumResolver: EnumTyp
         val button = unpacked.param(params.spell_button)
         val maxHit = unpacked.param(params.spell_maxhit)
         val levelReq = unpacked.param(params.spell_levelreq)
-        val experience = unpacked.paramOrNull(params.spell_castxp)
-
-        checkNotNull(experience) { "Cast xp not defined for spell obj: '$internalName' ($id)" }
 
         val objReqs = buildList {
             fun addRequirement(objParam: ParamObj, countParam: ParamInt) {

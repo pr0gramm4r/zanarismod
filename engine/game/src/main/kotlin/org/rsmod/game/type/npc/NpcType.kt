@@ -57,7 +57,7 @@ public data class UnpackedNpcType(
     public val recolD: ShortArray,
     public val retexS: ShortArray,
     public val retexD: ShortArray,
-    public val head: ShortArray,
+    public val head: IntArray,
     public val minimap: Boolean,
     public val vislevel: Int,
     public val resizeH: Int,
@@ -85,6 +85,7 @@ public data class UnpackedNpcType(
     public val crawlTurnBackAnim: Int,
     public val crawlTurnLeftAnim: Int,
     public val crawlTurnRightAnim: Int,
+    public val extraJs5Config: ByteArray,
     public val paramMap: ParamMap?,
     public val moveRestrict: MoveRestrict,
     public val defaultMode: NpcMode,
@@ -218,6 +219,7 @@ public data class UnpackedNpcType(
             "crawlTurnBackAnim=$crawlTurnBackAnim, " +
             "crawlTurnLeftAnim=$crawlTurnLeftAnim, " +
             "crawlTurnRightAnim=$crawlTurnRightAnim, " +
+            "extraJs5Config=${extraJs5Config.contentToString()}, " +
             "params=$paramMap, " +
             "moveRestrict=$moveRestrict, " +
             "defaultMode=$defaultMode, " +
@@ -289,6 +291,7 @@ public data class UnpackedNpcType(
         if (crawlTurnBackAnim != other.crawlTurnBackAnim) return false
         if (crawlTurnLeftAnim != other.crawlTurnLeftAnim) return false
         if (crawlTurnRightAnim != other.crawlTurnRightAnim) return false
+        if (!extraJs5Config.contentEquals(other.extraJs5Config)) return false
         if (paramMap != other.paramMap) return false
         if (moveRestrict != other.moveRestrict) return false
         if (defaultMode != other.defaultMode) return false
@@ -362,6 +365,7 @@ public data class UnpackedNpcType(
         result = 31 * result + crawlTurnBackAnim
         result = 31 * result + crawlTurnLeftAnim
         result = 31 * result + crawlTurnRightAnim
+        result = 31 * result + extraJs5Config.contentHashCode()
         result = 31 * result + (paramMap?.hashCode() ?: 0)
         result = 31 * result + moveRestrict.hashCode()
         result = 31 * result + defaultMode.hashCode()

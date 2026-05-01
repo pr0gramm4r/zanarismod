@@ -6,7 +6,6 @@ import jakarta.inject.Inject
 import net.rsprot.protocol.common.client.OldSchoolClientType
 import net.rsprot.protocol.game.outgoing.zone.header.UpdateZoneFullFollows
 import net.rsprot.protocol.game.outgoing.zone.header.UpdateZonePartialEnclosed
-import net.rsprot.protocol.game.outgoing.zone.header.UpdateZonePartialFollows
 import net.rsprot.protocol.message.ZoneProt
 import org.rsmod.api.registry.loc.LocRegistry
 import org.rsmod.api.registry.obj.ObjRegistry
@@ -82,8 +81,9 @@ constructor(
     private fun Player.processNewVisibleZones(buildArea: CoordGrid, zones: IntList) {
         for (zone in zones.intIterator()) {
             val key = ZoneKey(zone)
-            sendZoneResetUpdate(buildArea, key.toCoords())
-            sendZonePersistentUpdates(key)
+            val zoneBase = key.toCoords()
+            sendZoneResetUpdate(buildArea, zoneBase)
+            sendZonePersistentUpdates(buildArea, key, zoneBase)
         }
     }
 
@@ -94,12 +94,16 @@ constructor(
         client.write(message)
     }
 
-    private fun Player.sendZonePersistentUpdates(zone: ZoneKey) {
+    private fun Player.sendZonePersistentUpdates(
+        buildArea: CoordGrid,
+        zone: ZoneKey,
+        zoneBase: CoordGrid,
+    ) {
         val spawnedLocs = locReg.findAllSpawned(zone)
         sendPersistentLocs(spawnedLocs)
 
         val spawnedObjs = objReg.findAll(zone)
-        sendPersistentObjs(spawnedObjs, observerUUID)
+        sendPersistentObjs(buildArea, zoneBase, spawnedObjs, observerUUID)
     }
 
     private fun Player.sendPersistentLocs(locs: Sequence<LocInfo>) {
@@ -109,10 +113,17 @@ constructor(
         }
     }
 
-    private fun Player.sendPersistentObjs(objs: Sequence<Obj>, observerId: Long?) {
-        for (obj in objs) {
-            val prot = ZoneUpdateTransformer.toPersistentObjAdd(obj, observerId) ?: continue
-            client.write(prot)
+    private fun Player.sendPersistentObjs(
+        buildArea: CoordGrid,
+        zoneBase: CoordGrid,
+        objs: Sequence<Obj>,
+        observerId: Long?,
+    ) {
+        val prots =
+            objs.mapNotNull { obj -> ZoneUpdateTransformer.toPersistentObjAdd(obj, observerId) }
+                .toList()
+        if (prots.isNotEmpty()) {
+            sendZoneEnclosedUpdates(buildArea, zoneBase, prots)
         }
     }
 
@@ -125,12 +136,12 @@ constructor(
         for (zone in currZones) {
             val zoneKey = ZoneKey(zone)
             val zoneBase = zoneKey.toCoords()
-            sendZonePartialFollowsUpdates(buildArea, zoneKey, zoneBase)
+            sendPlayerSpecificEnclosedUpdates(buildArea, zoneKey, zoneBase)
             sendZoneSharedEnclosedUpdates(buildArea, zoneKey, zoneBase)
         }
     }
 
-    private fun Player.sendZonePartialFollowsUpdates(
+    private fun Player.sendPlayerSpecificEnclosedUpdates(
         buildArea: CoordGrid,
         zone: ZoneKey,
         zoneBase: CoordGrid,
@@ -138,10 +149,8 @@ constructor(
         val updates = updates[zone] ?: return
         check(updates.isNotEmpty) { "`updates` for zone should not be empty: $zone" }
 
-        // Only updates implementing [ZoneProtTransformer.PartialFollowsZoneProt] should be sent
-        // as part of the `UpdateZonePartialFollows` packet. To avoid sending a header with no
-        // payload under the scenario where all zone updates are "hidden" (i.e., none of the objs
-        // can be seen by the observer), we also filter updates that return `isHidden` as true.
+        // These updates are specific to the observer, so they cannot use the shared cached buffer.
+        // As of revision 237, obj zone payloads must be wrapped in partial-enclosed packets.
         val filtered =
             updates.filterIsInstance<ZoneUpdateTransformer.PartialFollowsZoneProt>().filterNot {
                 it.isHidden(observerUUID)
@@ -149,13 +158,8 @@ constructor(
         if (filtered.isEmpty()) {
             return
         }
-        val deltaX = zoneBase.x - buildArea.x
-        val deltaZ = zoneBase.z - buildArea.z
-        val message = UpdateZonePartialFollows(deltaX, deltaZ, zoneBase.level)
-        client.write(message)
-        for (prot in filtered) {
-            client.write(prot.backing)
-        }
+        val backing = filtered.map { it.backing }
+        sendZoneEnclosedUpdates(buildArea, zoneBase, backing)
     }
 
     private fun Player.sendZoneSharedEnclosedUpdates(
@@ -165,6 +169,18 @@ constructor(
     ) {
         val enclosed = enclosedBuffers[zone] ?: return
         val buffer = enclosed[OldSchoolClientType.DESKTOP] ?: return
+        val deltaX = zoneBase.x - buildArea.x
+        val deltaZ = zoneBase.z - buildArea.z
+        val prot = UpdateZonePartialEnclosed(deltaX, deltaZ, zoneBase.level, buffer)
+        client.write(prot)
+    }
+
+    private fun Player.sendZoneEnclosedUpdates(
+        buildArea: CoordGrid,
+        zoneBase: CoordGrid,
+        protList: Collection<ZoneProt>,
+    ) {
+        val buffer = enclosedBuffers.computeClientBuffer(OldSchoolClientType.DESKTOP, protList)
         val deltaX = zoneBase.x - buildArea.x
         val deltaZ = zoneBase.z - buildArea.z
         val prot = UpdateZonePartialEnclosed(deltaX, deltaZ, zoneBase.level, buffer)

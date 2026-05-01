@@ -157,5 +157,7 @@ constructor(private val random: GameRandom, private val dbTables: DbTableResolve
             music_varps.multi_23,
             music_varps.multi_24,
             music_varps.multi_25,
+            music_varps.multi_26,
+            music_varps.multi_27,
         )
 }

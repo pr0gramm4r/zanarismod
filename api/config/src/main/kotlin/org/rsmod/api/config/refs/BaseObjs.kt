@@ -526,6 +526,11 @@ object BaseObjs : ObjReferences() {
     val spell_chargeorb_air = find("66_charge_air_orb")
     val spell_charge = find("80_charge")
 
+    val minigame_teleport = find("minigame_teleport")
+    val ancient_minigame_teleport = find("ancient_minigame_teleport")
+    val arceuus_minigame_teleport = find("arceuus_minigame_teleport")
+    val lunar_minigame_teleport = find("lunar_minigame_teleport")
+
     val spell_hometeleport_lumbridge = find("48_home_teleport")
     val spell_lumbridge_teleport = find("31_lumbridge_teleport")
     val spell_varrock_teleport = find("25_varrock_teleport")

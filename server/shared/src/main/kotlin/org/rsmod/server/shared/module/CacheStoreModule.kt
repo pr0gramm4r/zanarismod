@@ -138,6 +138,9 @@ private class XteaMapProvider
 constructor(@XteaFilePath private val file: Path, @Json private val mapper: ObjectMapper) :
     Provider<XteaMap> {
     override fun get(): XteaMap {
+        if (!file.exists()) {
+            return XteaMap(HashMap())
+        }
         val reader = Files.newBufferedReader(file)
         val fileKeys = mapper.readValue(reader, Array<FileXtea>::class.java)
         val keys = fileKeys.associate { MapSquareKey(it.mapsquare) to it.key.toIntArray() }

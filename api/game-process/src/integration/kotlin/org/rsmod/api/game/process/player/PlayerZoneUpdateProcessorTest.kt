@@ -2,6 +2,7 @@ package org.rsmod.api.game.process.player
 
 import net.rsprot.protocol.api.util.ZonePartialEnclosedCacheBuffer
 import net.rsprot.protocol.game.outgoing.zone.header.UpdateZoneFullFollows
+import net.rsprot.protocol.game.outgoing.zone.header.UpdateZonePartialEnclosed
 import net.rsprot.protocol.game.outgoing.zone.payload.LocAddChangeV2
 import net.rsprot.protocol.game.outgoing.zone.payload.ObjAdd
 import net.rsprot.protocol.game.outgoing.zone.payload.ObjCount
@@ -126,11 +127,12 @@ class PlayerZoneUpdateProcessorTest {
             assertEquals(startZone, lastProcessedZone)
 
             // `processVisibleZoneUpdates`
-            assertEquals(2, captured.count { it is ZoneProt })
+            assertEquals(1, captured.count { it is ZoneProt })
             assertEquals(1, captured.countOf<LocAddChangeV2>())
             assertEquals(standardLoc, captured.singleMapOf(LocAddChangeV2::id))
-            assertEquals(1, captured.countOf<ObjAdd>())
-            assertEquals(standardObj, captured.singleMapOf(ObjAdd::id))
+            assertEquals(0, captured.countOf<ObjAdd>())
+            assertEquals(1, captured.countOf<UpdateZonePartialEnclosed>())
+            assertEquals(true, captured.single<UpdateZonePartialEnclosed>().payload.isReadable)
 
             process()
 
@@ -201,9 +203,10 @@ class PlayerZoneUpdateProcessorTest {
         check(zoneUpdateMap.updatedZones.size == 1)
 
         // Obj should be sent to `client2`.
-        assertEquals(1, client2.count { it is ZoneProt })
-        assertEquals(1, client2.countOf<ObjAdd>())
-        assertEquals(stackableObj, client2.singleMapOf(ObjAdd::id))
+        assertEquals(0, client2.count { it is ZoneProt })
+        assertEquals(0, client2.countOf<ObjAdd>())
+        assertEquals(1, client2.countOf<UpdateZonePartialEnclosed>())
+        assertEquals(true, client2.single<UpdateZonePartialEnclosed>().payload.isReadable)
 
         // `client1` should be oblivious to the Obj.
         assertEquals(0, client1.count { it is ZoneProt })
@@ -225,11 +228,10 @@ class PlayerZoneUpdateProcessorTest {
         process()
 
         // Obj count should be updated for `client2`.
-        assertEquals(1, client2.count { it is ZoneProt })
-        assertEquals(1, client2.countOf<ObjCount>())
-        assertEquals(stackableObj, client2.singleMapOf(ObjCount::id))
-        assertEquals(1, client2.singleMapOf(ObjCount::oldQuantity))
-        assertEquals(5, client2.singleMapOf(ObjCount::newQuantity))
+        assertEquals(0, client2.count { it is ZoneProt })
+        assertEquals(0, client2.countOf<ObjCount>())
+        assertEquals(1, client2.countOf<UpdateZonePartialEnclosed>())
+        assertEquals(true, client2.single<UpdateZonePartialEnclosed>().payload.isReadable)
 
         // `client1` should be oblivious to the Obj.
         assertEquals(0, client1.count { it is ZoneProt })
@@ -244,10 +246,10 @@ class PlayerZoneUpdateProcessorTest {
         process()
 
         // Obj should be deleted for `client2`.
-        assertEquals(1, client2.count { it is ZoneProt })
-        assertEquals(1, client2.countOf<ObjDel>())
-        assertEquals(stackableObj, client2.singleMapOf(ObjDel::id))
-        assertEquals(5, client2.singleMapOf(ObjDel::quantity))
+        assertEquals(0, client2.count { it is ZoneProt })
+        assertEquals(0, client2.countOf<ObjDel>())
+        assertEquals(1, client2.countOf<UpdateZonePartialEnclosed>())
+        assertEquals(true, client2.single<UpdateZonePartialEnclosed>().payload.isReadable)
 
         // `client1` should be oblivious to the Obj.
         assertEquals(0, client1.count { it is ZoneProt })
