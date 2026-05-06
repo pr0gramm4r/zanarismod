@@ -6,6 +6,7 @@ import org.rsmod.api.net.rsprot.player.modLevelTeleMoveSpeed
 import org.rsmod.api.net.rsprot.player.protectedTelejump
 import org.rsmod.api.player.output.clearMapFlag
 import org.rsmod.api.player.protect.clearPendingAction
+import org.rsmod.api.player.ui.ifClose
 import org.rsmod.api.player.vars.ctrlMoveSpeed
 import org.rsmod.api.realm.Realm
 import org.rsmod.events.EventBus
@@ -25,6 +26,12 @@ constructor(
     override fun handle(player: Player, message: MoveMinimapClick) {
         if (player.isDelayed) {
             player.clearMapFlag()
+            return
+        }
+        if (player.ui.modals.isNotEmpty()) {
+            player.clearPendingAction(eventBus)
+            player.clearMapFlag()
+            player.ifClose(eventBus)
             return
         }
         val dest = CoordGrid(message.x, message.z, player.level)

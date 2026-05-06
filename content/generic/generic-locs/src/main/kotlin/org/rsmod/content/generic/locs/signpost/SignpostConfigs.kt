@@ -1,6 +1,7 @@
 package org.rsmod.content.generic.locs.signpost
 
 import org.rsmod.api.type.builders.enums.EnumBuilder
+import org.rsmod.api.type.editors.loc.LocEditor
 import org.rsmod.api.type.refs.comp.ComponentReferences
 import org.rsmod.api.type.refs.enums.EnumReferences
 import org.rsmod.api.type.refs.interf.InterfaceReferences
@@ -14,7 +15,16 @@ internal typealias signpost_interfaces = SignpostInterfaces
 internal typealias signpost_components = SignpostComponents
 
 internal object SignpostLocs : LocReferences() {
-    val signpost = find("aide_signpost_1", 5944252288185964868)
+    val aide_signpost = find("aide_signpost_1", 5944252288185964868)
+    val lumbridge = find("signpost_good_fourway", 5944252288185951991)
+
+    val all = listOf(aide_signpost, lumbridge)
+}
+
+internal object SignpostLocEdits : LocEditor() {
+    init {
+        edit(signpost_locs.lumbridge) { op1 = "Read" }
+    }
 }
 
 internal object SignpostInterfaces : InterfaceReferences() {
@@ -22,6 +32,7 @@ internal object SignpostInterfaces : InterfaceReferences() {
 }
 
 internal object SignpostComponents : ComponentReferences() {
+    val close_button = find("aide_compass:com_12")
     val signpost_north = find("aide_compass:aide_north_text_2", 3633456669255458235)
     val signpost_east = find("aide_compass:aide_east_text_2", 6865859231034431206)
     val signpost_south = find("aide_compass:aide_south_text_2", 3946237333876253083)
