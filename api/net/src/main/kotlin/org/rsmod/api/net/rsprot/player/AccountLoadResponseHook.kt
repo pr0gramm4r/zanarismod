@@ -258,6 +258,7 @@ class AccountLoadResponseHook(
         if (register.isSuccess()) {
             eventBus.publish(SessionStateEvent.Login(player))
             eventBus.publish(SessionStateEvent.EngineLogin(player))
+            logger.info { "Player login completed: slot=$slotId, world=$world" }
             return
         }
         logger.warn { "Failed to register player: $register (player=$player)" }

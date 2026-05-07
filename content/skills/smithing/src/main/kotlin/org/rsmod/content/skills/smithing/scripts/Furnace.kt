@@ -43,6 +43,9 @@ constructor(
         for (loc in furnace_locs.all) {
             onOpLoc1(loc) { openSmelting(it.loc) }
             onOpLoc2(loc) { openSmelting(it.loc) }
+            for (ore in smeltingOres) {
+                onOpLocU(loc, ore) { openSmelting(it.loc) }
+            }
             onOpLocU(loc, furnace_objs.gold_bar) { openJewellery(it.loc, goldJewelleryContext) }
             onOpLocU(loc, furnace_objs.silver_bar) { openJewellery(it.loc, silverJewelleryContext) }
         }
@@ -409,6 +412,9 @@ constructor(
                         listOf(Material(furnace_objs.runite_ore), Material(furnace_objs.coal, 8)),
                 ),
             )
+
+        val smeltingOres =
+            smeltingRecipes.flatMap { recipe -> recipe.materials.map { it.obj } }.distinct()
 
         val skillmultiComponents =
             listOf(
