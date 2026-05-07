@@ -2740,6 +2740,20 @@ public class ProtectedAccess(
     }
 
     /**
+     * Suspends until a [ResumePCountDialogInput] is received without opening the standard count
+     * dialog. This is intended for interfaces that submit count-dialog input themselves.
+     *
+     * @throws ProtectedAccessLostException if the player could not retain protected access after
+     *   the coroutine suspension.
+     * @see [resumeWithMainModalProtectedAccess]
+     */
+    public suspend fun countDialogInput(): Int {
+        val modal = player.ui.getModalOrNull(components.mainmodal)
+        val input = coroutine.pause(ResumePCountDialogInput::class)
+        return resumeWithMainModalProtectedAccess(input.count.absoluteValue, modal)
+    }
+
+    /**
      * A version of [countDialog] that allows the returned value to be negative.
      *
      * @throws ProtectedAccessLostException if the player could not retain protected access after

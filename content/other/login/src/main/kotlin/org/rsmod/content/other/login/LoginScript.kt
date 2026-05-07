@@ -51,7 +51,6 @@ constructor(
     private val transmitVars by lazy { transmitVars() }
 
     private var Player.chatboxUnlocked: Boolean by boolVarBit(varbits.has_displayname_transmitter)
-    private var Player.hideRoofs by boolVarBit(varbits.option_hide_rooftops)
 
     override fun ScriptContext.startup() {
         onEvent<SessionStateEvent.EngineLogin>(0L) { player.engineLogin() }
@@ -90,7 +89,8 @@ constructor(
     private fun Player.sendVars() {
         client.write(VarpReset)
         chatboxUnlocked = displayName.isNotBlank()
-        hideRoofs = true
+        setDefaultVarBit(varbits.option_hide_rooftops, DEFAULT_HIDE_ROOFS)
+        setMinimumVarBit(varbits.settings_hitsplat_threshold, DEFAULT_HITSPLAT_THRESHOLD)
         setDefaultAudioOptions()
         for (varp in transmitVars) {
             if (varp in vars) {
@@ -140,6 +140,18 @@ constructor(
     private fun Player.setDefaultVarp(varp: VarpType, value: Int) {
         if (varp !in vars) {
             VarPlayerIntMapSetter.set(this, varp, value)
+        }
+    }
+
+    private fun Player.setDefaultVarBit(varbit: VarBitType, value: Int) {
+        if (varbit.baseVar !in vars) {
+            setVarBit(varbit, value)
+        }
+    }
+
+    private fun Player.setMinimumVarBit(varbit: VarBitType, value: Int) {
+        if (vars[varbit] < value) {
+            setVarBit(varbit, value)
         }
     }
 
@@ -208,5 +220,7 @@ constructor(
 
         private const val DEFAULT_AUDIO_VOLUME = 100
         private const val DEFAULT_UNMUTE_VOLUME = 5
+        private const val DEFAULT_HIDE_ROOFS = 1
+        private const val DEFAULT_HITSPLAT_THRESHOLD = 10
     }
 }

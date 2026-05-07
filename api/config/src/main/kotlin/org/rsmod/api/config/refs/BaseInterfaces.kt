@@ -56,6 +56,7 @@ object BaseInterfaces : InterfaceReferences() {
     val double_obj_dialogue = find("objectbox_double", 9223372035376440778)
     val destroy_obj_dialogue = find("confirmdestroy", 923450919)
     val menu = find("menu", 130230041)
+    val textfield_csv = find("textfield_csv")
 
     val popupoverlay = find("popupoverlay", 9223372035707796330)
     val ge_collection_box = find("ge_collect", 9223372036801773648)
@@ -64,4 +65,5 @@ object BaseInterfaces : InterfaceReferences() {
     val bond_main = find("bond_main", 9223372036023293853)
     val poh_options = find("poh_options", 9223372035476859568)
     val settings = find("settings", 1605189305)
+    val colour_pallet = find("colour_pallet")
 }

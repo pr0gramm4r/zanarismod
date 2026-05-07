@@ -66,7 +66,10 @@ class AudioSettingsScript @Inject constructor(private val musicPlayer: MusicPlay
         onIfOverlayButton(setting_components.areasounds_bobble_container) {
             player.selectAreaSoundSlider(comsub)
         }
-        onIfOverlayScriptTrigger(setting_components.areasounds_slider_bobble, AREA_SOUND_VOLUME_SCRIPT) {
+        onIfOverlayScriptTrigger(
+            setting_components.areasounds_slider_bobble,
+            AREA_SOUND_VOLUME_SCRIPT,
+        ) {
             player.setAreaSoundsVolume(volumeArg())
         }
 

@@ -12,7 +12,12 @@ object SettingComponents : ComponentReferences() {
     val audio_tab = find("settings_side:audio_tab")
     val display_tab = find("settings_side:display_tab")
     val settings_open = find("settings_side:settings_open")
+    val settings_close = find("settings:close")
+    val categories_clickzone = find("settings:categories_clickzone")
     val settings_clickzone = find("settings:settings_clickzone")
+    val settings_popup = find("settings:popup")
+    val colour_pallet_colours = find("colour_pallet:pallet_colours")
+    val colour_pallet_custom_clickzone = find("colour_pallet:pallet_custom_clickzone")
 
     val skull_prevention = find("settings_side:skull_prevention")
     val attack_priority_player_buttons = find("settings_side:attack_priority_player_buttons")
