@@ -97,12 +97,22 @@ constructor(
 
     private fun encodeAll() {
         val configs = TypeListMapDecoder.from(enrichedCache, names)
-        val updates = collectUpdateMap(configs)
-        val params = transmitParamKeys(configs.params, updates.params)
+        val wideLocModelIds = requiresWideLocModelIds(configs)
+        val updates = collectUpdateMap(configs, wideLocModelIds)
+        val preservedParams = preservedVanillaParamKeys(configs, updates)
+        val params = transmitParamKeys(configs.params, updates.params, preservedParams)
         val varps = transmitVarpKeys(configs.varps, updates.varps)
         val tables = transmitTableKeys(configs.dbTables, updates.dbTables)
-        encodeCacheTypes(updates, gameCachePath, EncoderContext.server(params, varps, tables))
-        encodeCacheTypes(updates, js5CachePath, EncoderContext.client(params, varps, tables))
+        encodeCacheTypes(
+            updates,
+            gameCachePath,
+            EncoderContext.server(params, varps, tables, wideLocModelIds),
+        )
+        encodeCacheTypes(
+            updates,
+            js5CachePath,
+            EncoderContext.client(params, varps, tables, wideLocModelIds),
+        )
     }
 
     /**
@@ -122,12 +132,13 @@ constructor(
     private fun transmitParamKeys(
         cache: ParamTypeList,
         updates: List<UnpackedParamType<*>>,
+        preservedKeys: Set<Int>,
     ): Set<Int> {
         val updateParamKeys = IntOpenHashSet(updates.map(UnpackedParamType<*>::id))
         val cacheTransmitKeys = cache.filterTransmitKeys().filterNot(updateParamKeys::contains)
         val updateTransmitKeys =
             updates.filter(UnpackedParamType<*>::transmit).map(UnpackedParamType<*>::id)
-        return IntOpenHashSet(cacheTransmitKeys + updateTransmitKeys)
+        return IntOpenHashSet(cacheTransmitKeys + updateTransmitKeys + preservedKeys)
     }
 
     /**
@@ -179,14 +190,28 @@ constructor(
         return IntOpenHashSet(cacheTransmitKeys + updateTransmitKeys)
     }
 
-    private fun collectUpdateMap(vanilla: TypeListMap): UpdateMap {
+    private fun collectUpdateMap(vanilla: TypeListMap, wideLocModelIds: Boolean): UpdateMap {
         val build = builders.resultValues.toUpdateMap()
         val edit = editors.resultValues.toUpdateMap()
 
         val invs = merge(build.invs, edit.invs, vanilla.invs, InvTypeBuilder)
-        val locs = merge(build.locs, edit.locs, vanilla.locs, LocTypeBuilder)
+        val locs = locUpdates(build.locs, edit.locs, vanilla.locs, wideLocModelIds)
         val npcs = merge(build.npcs, edit.npcs, vanilla.npcs, NpcTypeBuilder)
+        val clientNpcs =
+            if (build.npcs.isEmpty()) {
+                emptyList()
+            } else {
+                val builtIds = build.npcs.mapTo(IntOpenHashSet()) { it.id }
+                npcs.filter { it.id in builtIds }
+            }
         val objs = merge(build.objs, edit.objs, vanilla.objs, ObjTypeBuilder)
+        val clientObjs =
+            if (build.objs.isEmpty()) {
+                emptyList()
+            } else {
+                val builtIds = build.objs.mapTo(IntOpenHashSet()) { it.id }
+                objs.filter { it.id in builtIds }
+            }
         val hunt = merge(build.hunt, edit.hunt, vanilla.hunt, HuntModeTypeBuilder)
         val areas = merge(build.areas, edit.areas, vanilla.areas, AreaTypeBuilder)
         val enums = merge(build.enums, edit.enums, vanilla.enums, EnumTypeBuilder)
@@ -219,7 +244,9 @@ constructor(
             invs = invs,
             locs = locs,
             npcs = npcs,
+            clientNpcs = clientNpcs,
             objs = objs,
+            clientObjs = clientObjs,
             hunt = hunt,
             stats = stats,
             areas = areas,
@@ -243,7 +270,9 @@ constructor(
         val invs: List<UnpackedInvType>,
         val locs: List<UnpackedLocType>,
         val npcs: List<UnpackedNpcType>,
+        val clientNpcs: List<UnpackedNpcType>,
         val objs: List<UnpackedObjType>,
+        val clientObjs: List<UnpackedObjType>,
         val stats: List<UnpackedStatType>,
         val areas: List<UnpackedAreaType>,
         val hunt: List<UnpackedHuntModeType>,
@@ -288,7 +317,9 @@ constructor(
             invs = invs,
             locs = locs,
             npcs = npcs,
+            clientNpcs = npcs,
             objs = objs,
+            clientObjs = objs,
             hunt = hunt,
             stats = stats,
             areas = areas,
@@ -306,6 +337,52 @@ constructor(
             dbTables = dbTables,
             modLevels = modLevels,
         )
+    }
+
+    private fun requiresWideLocModelIds(vanilla: TypeListMap): Boolean = vanilla.gameVals.names.isNotEmpty()
+
+    private fun locUpdates(
+        builders: List<UnpackedLocType>,
+        editors: List<UnpackedLocType>,
+        cacheTypes: Map<Int, UnpackedLocType>,
+        wideLocModelIds: Boolean,
+    ): List<UnpackedLocType> {
+        val updates = merge(builders, editors, cacheTypes, LocTypeBuilder)
+        if (!wideLocModelIds) {
+            return updates
+        }
+        val updateMap = updates.associateBy(UnpackedLocType::id)
+        val allTypes = cacheTypes.values.map { updateMap[it.id] ?: it }
+        val newTypes = updates.filterNot { it.id in cacheTypes }
+        return allTypes + newTypes
+    }
+
+    private fun preservedVanillaParamKeys(vanilla: TypeListMap, updates: UpdateMap): Set<Int> {
+        val keys = IntOpenHashSet()
+        keys.addParamKeys(vanilla.locs, updates.locs.mapTo(IntOpenHashSet()) { it.id })
+        keys.addParamKeys(vanilla.npcs, updates.npcs.mapTo(IntOpenHashSet()) { it.id })
+        keys.addParamKeys(vanilla.objs, updates.objs.mapTo(IntOpenHashSet()) { it.id })
+        return keys
+    }
+
+    private fun <T : CacheType> IntOpenHashSet.addParamKeys(
+        cacheTypes: Map<Int, T>,
+        updateIds: Set<Int>,
+    ) {
+        for (id in updateIds) {
+            val paramMap =
+                when (val type = cacheTypes[id]) {
+                    is UnpackedLocType -> type.paramMap
+                    is UnpackedNpcType -> type.paramMap
+                    is UnpackedObjType -> type.paramMap
+                    else -> null
+                }
+            if (paramMap == null) {
+                continue
+            }
+            paramMap.typedMap?.keys?.let(::addAll)
+            addAll(paramMap.primitiveMap.keys)
+        }
     }
 
     private fun <T : CacheType> merge(
@@ -333,8 +410,10 @@ constructor(
             EnumTypeEncoder.encodeAll(cache, updates.enums, ctx)
             InvTypeEncoder.encodeAll(cache, updates.invs, ctx)
             LocTypeEncoder.encodeAll(cache, updates.locs, ctx)
-            NpcTypeEncoder.encodeAll(cache, updates.npcs, ctx)
-            ObjTypeEncoder.encodeAll(cache, updates.objs, ctx)
+            val npcs = if (ctx.encodeFull) updates.npcs else updates.clientNpcs
+            NpcTypeEncoder.encodeAll(cache, npcs, ctx)
+            val objs = if (ctx.encodeFull) updates.objs else updates.clientObjs
+            ObjTypeEncoder.encodeAll(cache, objs, ctx)
             StatTypeEncoder.encodeAll(cache, updates.stats, ctx)
             VarpTypeEncoder.encodeAll(cache, updates.varps, ctx)
             VarBitTypeEncoder.encodeAll(cache, updates.varbits, ctx)

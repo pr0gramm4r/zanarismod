@@ -6,18 +6,19 @@ import net.rsprot.protocol.game.outgoing.info.playerinfo.PlayerAvatarExtendedInf
 import net.rsprot.protocol.game.outgoing.info.util.getOrThrow
 import net.rsprot.protocol.game.outgoing.info.util.isEmpty
 import net.rsprot.protocol.game.outgoing.info.util.safeReleaseOrThrow
-import net.rsprot.protocol.game.outgoing.map.RebuildLogin
-import net.rsprot.protocol.game.outgoing.map.RebuildNormal
-import net.rsprot.protocol.game.outgoing.map.RebuildRegion
+import net.rsprot.protocol.game.outgoing.map.RebuildLoginV2
+import net.rsprot.protocol.game.outgoing.map.RebuildNormalV2
 import net.rsprot.protocol.game.outgoing.map.RebuildRegionV2
-import net.rsprot.protocol.game.outgoing.map.util.ReferenceZone
+import net.rsprot.protocol.game.outgoing.map.util.RebuildRegionZone
 import org.rsmod.api.config.refs.baseanimsets
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.player.righthand
 import org.rsmod.api.registry.region.RegionRegistry
+import org.rsmod.api.utils.map.BuildAreaUtils
 import org.rsmod.game.client.ClientCycle
 import org.rsmod.game.entity.Player
 import org.rsmod.game.entity.util.EntityFaceAngle
+import org.rsmod.game.entity.util.EntityFaceTarget
 import org.rsmod.game.headbar.Headbar
 import org.rsmod.game.hit.Hitmark
 import org.rsmod.game.movement.MoveSpeed
@@ -61,11 +62,13 @@ class RspCycle(
     }
 
     private fun Player.queueRebuildLogin() {
-        val rebuild = RebuildLogin(x shr 3, z shr 3, worldId, infos.playerInfo)
+        val rebuild = RebuildLoginV2(x shr 3, z shr 3, worldId, infos.playerInfo)
         session.queue(rebuild)
     }
 
     override fun update(player: Player) {
+        val teleporting = player.pendingTeleport || player.pendingTelejump || player.isTeleportMovement
+        infos.npcInfo.setZoneSearchRadius(if (teleporting) NO_NPC_SEARCH_RADIUS else DEFAULT_NPC_SEARCH_RADIUS)
         player.updateMoveSpeed()
         player.updateCoords()
         player.rebuildArea()
@@ -124,7 +127,7 @@ class RspCycle(
             knownCachedSpeed = cachedMoveSpeed
         }
         val moveSpeed = resolvePendingMoveSpeed()
-        if (moveSpeed != cachedMoveSpeed && coords != knownCoords) {
+        if (coords != knownCoords && (moveSpeed != cachedMoveSpeed || moveSpeed == MoveSpeed.Stationary)) {
             val extendedInfo = infos.playerInfo.avatar.extendedInfo
             extendedInfo.setTempMoveSpeed(moveSpeed.protocolTempMoveSpeed)
         }
@@ -133,10 +136,21 @@ class RspCycle(
     private fun Player.resolvePendingMoveSpeed(): MoveSpeed =
         when {
             pendingTelejump -> MoveSpeed.Stationary
-            pendingTeleport -> MoveSpeed.Walk
+            pendingTeleport -> MoveSpeed.Stationary
+            isTeleportMovement -> MoveSpeed.Stationary
             pendingStepCount == 1 -> MoveSpeed.Walk
             pendingStepCount == 2 -> MoveSpeed.Run
             else -> moveSpeed
+        }
+
+    private val Player.isTeleportMovement: Boolean
+        get() {
+            if (coords == knownCoords) {
+                return false
+            }
+            val deltaX = kotlin.math.abs(x - knownCoords.x)
+            val deltaZ = kotlin.math.abs(z - knownCoords.z)
+            return level != knownCoords.level || deltaX > 2 || deltaZ > 2
         }
 
     private val MoveSpeed.protocolMoveSpeed: Int
@@ -159,6 +173,7 @@ class RspCycle(
     }
 
     private fun Player.rebuildArea() {
+        refreshBuildArea()
         val recalcBuildArea = knownBuildArea != buildArea && buildArea != CoordGrid.NULL
         if (recalcBuildArea) {
             val zone = ZoneKey.from(buildArea)
@@ -176,10 +191,11 @@ class RspCycle(
         }
 
         if (regionUid == null) {
-            val rebuild = RebuildNormal(x shr 3, z shr 3, worldId)
+            val rebuild = RebuildNormalV2(x shr 3, z shr 3, worldId)
             knownBuildArea = buildArea
             knownRegionUid = null
             cachedRegionZoneProvider = null
+            markMapBuildPending()
             session.queue(rebuild)
             return
         }
@@ -200,10 +216,23 @@ class RspCycle(
         }
 
         val zoneProvider = cachedRegionZoneProvider ?: createRegionZoneProvider(region)
-        val rebuild = RebuildRegion(x shr 3, z shr 3, true, zoneProvider)
+        val rebuild = RebuildRegionV2(x shr 3, z shr 3, true, zoneProvider)
         knownBuildArea = buildArea
         cachedRegionZoneProvider = zoneProvider
+        markMapBuildPending()
         session.queue(rebuild)
+    }
+
+    private fun Player.refreshBuildArea() {
+        if (buildArea == CoordGrid.NULL || BuildAreaUtils.requiresNewBuildArea(this)) {
+            buildArea = BuildAreaUtils.calculateBuildArea(ZoneKey.from(coords))
+        }
+    }
+
+    private fun Player.markMapBuildPending() {
+        lastMapBuildComplete = Int.MIN_VALUE
+        lastProcessedZone = ZoneKey.from(coords)
+        visibleZoneKeys.clear()
     }
 
     private fun createRegionZoneProvider(region: Region): RebuildRegionV2.RebuildRegionZoneProvider {
@@ -214,7 +243,7 @@ class RspCycle(
                 if (copyZone == RegionZoneCopy.NULL) {
                     return@associateWith null
                 }
-                ReferenceZone(
+                RebuildRegionZone(
                     copyZone.normalX,
                     copyZone.normalZ,
                     copyZone.normalLevel,
@@ -223,7 +252,7 @@ class RspCycle(
             }
         val zoneProvider =
             object : RebuildRegionV2.RebuildRegionZoneProvider {
-                override fun provide(zoneX: Int, zoneZ: Int, level: Int): ReferenceZone? {
+                override fun provide(zoneX: Int, zoneZ: Int, level: Int): RebuildRegionZone? {
                     val zoneKey = ZoneKey(zoneX, zoneZ, level)
                     return rebuildZones[zoneKey]
                 }
@@ -245,10 +274,9 @@ class RspCycle(
     }
 
     private fun Player.applyFacePathingEntity() {
-        val slot = faceEntity.entitySlot
-        if (knownFaceEntity != slot) {
-            playerExtendedInfo.setFacePathingEntity(slot)
-            knownFaceEntity = slot
+        if (knownFaceEntity != faceEntity.entitySlot) {
+            playerExtendedInfo.setFaceTarget(faceEntity)
+            knownFaceEntity = faceEntity.entitySlot
         }
     }
 
@@ -421,5 +449,19 @@ class RspCycle(
             val objType = objTypes[obj]
             info.setWornObj(wearpos.slot, obj.id, objType.wearpos2, objType.wearpos3)
         }
+    }
+
+    private companion object {
+        private const val DEFAULT_NPC_SEARCH_RADIUS = 3
+        private const val NO_NPC_SEARCH_RADIUS = -1
+    }
+}
+
+private fun PlayerAvatarExtendedInfo.setFaceTarget(target: EntityFaceTarget) {
+    when {
+        target.entitySlot == -1 -> resetFacing()
+        target.isNpc -> setFaceNpc(target.npcSlot, instant = false, walkMode = 0, entityFallbackAngle = 0)
+        target.isPlayer ->
+            setFacePlayer(target.playerSlot, instant = false, walkMode = 0, entityFallbackAngle = 0)
     }
 }

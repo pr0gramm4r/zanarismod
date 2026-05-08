@@ -23,13 +23,21 @@ public enum class WeaponCategory(public val id: Int, public val text: String) {
     Thrown(19, "Thrown"),
     Whip(20, "Whip"),
     BladedStaff(21, "Bladed Staff"),
-    Banner(22, "Banner"),
+    StaffSpellblade(22, "Spellblade"),
     // When swapping to a godsword, the associated op content script seems to explicitly re-set varp
     // 357 (current weapon category for the tab interface) from `10` to `23`.
     GodSword(23, "2h sword"),
     PoweredStaff(24, "Powered Staff"),
+    Banner(25, "Banner"),
+    ChargeSpear(26, "Charge Spear"),
     Bludgeon(27, "Bludgeon"),
-    Bulwark(28, "Bulwark");
+    Bulwark(28, "Bulwark"),
+    PoweredWand(29, "Powered Wand"),
+    Partisan(30, "Partisan"),
+    Tribrid(31, "Tribrid"),
+    Egg(32, "Egg"),
+    SailingCannon(33, "Sailing Cannon"),
+    MultiMelee(34, "Melee");
 
     public companion object {
         public fun getOrUnarmed(id: Int?): WeaponCategory =
@@ -63,11 +71,19 @@ public enum class WeaponCategory(public val id: Int, public val text: String) {
                 Thrown.id -> Thrown
                 Whip.id -> Whip
                 BladedStaff.id -> BladedStaff
+                StaffSpellblade.id -> StaffSpellblade
                 Banner.id -> Banner
                 GodSword.id -> GodSword
                 PoweredStaff.id -> PoweredStaff
+                ChargeSpear.id -> ChargeSpear
                 Bludgeon.id -> Bludgeon
                 Bulwark.id -> Bulwark
+                PoweredWand.id -> PoweredWand
+                Partisan.id -> Partisan
+                Tribrid.id -> Tribrid
+                Egg.id -> Egg
+                SailingCannon.id -> SailingCannon
+                MultiMelee.id -> MultiMelee
                 else -> null
             }
     }

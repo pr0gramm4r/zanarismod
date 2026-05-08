@@ -46,6 +46,33 @@ import org.rsmod.routefinder.collision.CollisionFlagMap
 //  Can then get rid of all the intricate constructors for the required registries and processors.
 class PlayerZoneUpdateProcessorTest {
     @Test
+    fun GameTestState.`delay initial zone packets until map build completes`() =
+        runAdvancedGameTest {
+            val parameters = createZoneProcess()
+            val buildProcessor = PlayerBuildAreaProcessor()
+            val zoneProcessor = parameters.zoneProcessor
+            val startCoords = CoordGrid(0, 1, 1, 32, 32)
+
+            withPlayer(startCoords) {
+                val captured = attachClientCapture()
+                val startZone = ZoneKey.from(startCoords)
+
+                buildProcessor.process(this)
+                zoneProcessor.process(this)
+
+                assertEquals(0, captured.count())
+                assertEquals(startZone, lastProcessedZone)
+                assertEquals(emptySet<Int>(), visibleZoneKeys.toSet())
+
+                lastMapBuildComplete = currentMapClock
+                buildProcessor.process(this)
+                zoneProcessor.process(this)
+
+                assertEquals(49, captured.countOf<UpdateZoneFullFollows>())
+            }
+        }
+
+    @Test
     fun GameTestState.`process zones in a new build area`() = runAdvancedGameTest {
         val parameters = createZoneProcess()
         val buildProcessor = PlayerBuildAreaProcessor()
@@ -58,6 +85,8 @@ class PlayerZoneUpdateProcessorTest {
         val startCoords = CoordGrid(0, 1, 1, 32, 32)
         withPlayer(startCoords) {
             val captured = attachClientCapture()
+
+            lastMapBuildComplete = currentMapClock
 
             // Set player observer uuid to view `obj`.
             val observer = 1L
@@ -161,12 +190,14 @@ class PlayerZoneUpdateProcessorTest {
             playerFactory.create(startCoords) {
                 uuid = 1
                 observerUUID = 1
+                lastMapBuildComplete = currentMapClock
             }
 
         val player2 =
             playerFactory.create(startCoords) {
                 uuid = 2
                 observerUUID = 2
+                lastMapBuildComplete = currentMapClock
             }
 
         val client1 = player1.attachClientCapture()

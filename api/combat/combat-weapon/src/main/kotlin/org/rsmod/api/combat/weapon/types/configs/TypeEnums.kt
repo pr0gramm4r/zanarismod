@@ -38,10 +38,18 @@ internal object TypeEnumBuilder : EnumBuilder() {
             types(WeaponCategory.Thrown, light, light, light)
             types(WeaponCategory.Whip, slash, slash, slash)
             types(WeaponCategory.BladedStaff, stab, slash, crush)
+            types(WeaponCategory.StaffSpellblade, stab, slash, crush)
             types(WeaponCategory.Banner, slash, slash, crush, slash)
             types(WeaponCategory.PoweredStaff, magic, magic, magic)
+            types(WeaponCategory.ChargeSpear, stab, slash, stab)
             types(WeaponCategory.Bludgeon, crush, crush, crush)
             types(WeaponCategory.Bulwark, crush)
+            types(WeaponCategory.PoweredWand, magic, magic, magic)
+            types(WeaponCategory.Partisan, stab, stab, crush, stab)
+            types(WeaponCategory.Tribrid, stab, standard, magic, null)
+            types(WeaponCategory.Egg, crush, crush, crush)
+            types(WeaponCategory.SailingCannon, heavy, heavy, heavy)
+            types(WeaponCategory.MultiMelee, stab, slash, crush, slash)
         }
     }
 

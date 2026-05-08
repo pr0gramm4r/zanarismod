@@ -19,4 +19,6 @@ dependencies {
     implementation(projects.engine.map)
     implementation(projects.engine.module)
     implementation(projects.engine.routefinder)
+
+    "integrationImplementation"(libs.openrs2.cache)
 }

@@ -12,9 +12,9 @@ import org.rsmod.game.inv.Inventory
 public object UpdateInventory {
     /** @see [UpdateInvFull] */
     public fun updateInvFull(player: Player, inv: Inventory) {
-        val highestSlot = inv.lastOccupiedSlot()
+        val highestSlot = inv.fullTransmitCapacity()
         val provider = RspObjProvider(inv.objs)
-        val message = UpdateInvFull(-(1234 + inv.type.id), inv.type.id, highestSlot, provider)
+        val message = UpdateInvFull(inv.type.id, highestSlot, provider)
         player.client.write(message)
     }
 
@@ -22,7 +22,7 @@ public object UpdateInventory {
     public fun updateInvPartial(player: Player, inv: Inventory) {
         val changedSlots = inv.modifiedSlots.asSequence().iterator()
         val provider = RspIndexedObjProvider(inv.objs, changedSlots)
-        val message = UpdateInvPartial(-1, -(1234 + inv.type.id), inv.type.id, provider)
+        val message = UpdateInvPartial(inv.type.id, provider)
         player.client.write(message)
     }
 
@@ -37,6 +37,11 @@ public object UpdateInventory {
     public fun resendSlot(inv: Inventory, slot: Int) {
         inv.modifiedSlots.set(slot)
     }
+
+    private fun Inventory.fullTransmitCapacity(): Int =
+        if (type.internalName == WORN_INV_NAME) size else lastOccupiedSlot()
+
+    private const val WORN_INV_NAME = "worn"
 }
 
 private fun BitSet.asSequence(): Sequence<Int> = sequence {

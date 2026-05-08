@@ -62,7 +62,7 @@ We highly suggest using [RSProx][rsprox] as the client-of-choice:
 
 This is an invaluable tool for debugging and ensuring accurate game mechanics.
 
-For local RSProx targets, use revision `237.5`, port `43594`, and the RSA modulus
+For local RSProx targets, use revision `238.1` (protocol `238`), port `43594`, and the RSA modulus
 printed by `generateRsa` or stored in `.data/client.key`.
 
 Protocol support is provided through the published [rsprot][rsprot] artifacts.
@@ -85,7 +85,7 @@ ZanaRiSmod is available under the terms of the ISC license, which is similar to 
 [discord]: https://discord.gg/UznZnZR
 [discord-badge]: https://img.shields.io/discord/550024461626114053?color=%237289da&logo=discord
 [patch]: https://oldschool.runescape.wiki/w/Update:Leagues_VI_Changes
-[rev-badge]: https://img.shields.io/badge/revision-237-important
+[rev-badge]: https://img.shields.io/badge/revision-238-important
 [core-ci]: https://github.com/rsmod/rsmod/actions/workflows/core-ci.yml
 [core-ci-badge]: https://github.com/rsmod/rsmod/actions/workflows/core-ci.yml/badge.svg?branch=main
 [nightly-ci]: https://github.com/rsmod/rsmod/actions/workflows/nightly-ci.yml

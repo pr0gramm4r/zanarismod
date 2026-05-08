@@ -7,7 +7,7 @@ import net.rsprot.protocol.game.incoming.buttons.If3Button
 import net.rsprot.protocol.game.incoming.buttons.IfButtonD
 import net.rsprot.protocol.game.incoming.buttons.IfButtonT
 import net.rsprot.protocol.game.incoming.buttons.IfScriptTrigger
-import net.rsprot.protocol.game.incoming.locs.OpLoc
+import net.rsprot.protocol.game.incoming.locs.OpLocV2
 import net.rsprot.protocol.game.incoming.locs.OpLoc6
 import net.rsprot.protocol.game.incoming.locs.OpLocT
 import net.rsprot.protocol.game.incoming.messaging.MessagePublic
@@ -17,10 +17,10 @@ import net.rsprot.protocol.game.incoming.misc.user.ClientCheat
 import net.rsprot.protocol.game.incoming.misc.user.CloseModal
 import net.rsprot.protocol.game.incoming.misc.user.MoveGameClick
 import net.rsprot.protocol.game.incoming.misc.user.MoveMinimapClick
-import net.rsprot.protocol.game.incoming.npcs.OpNpc
+import net.rsprot.protocol.game.incoming.npcs.OpNpcV2
 import net.rsprot.protocol.game.incoming.npcs.OpNpc6
 import net.rsprot.protocol.game.incoming.npcs.OpNpcT
-import net.rsprot.protocol.game.incoming.objs.OpObj
+import net.rsprot.protocol.game.incoming.objs.OpObjV2
 import net.rsprot.protocol.game.incoming.objs.OpObj6
 import net.rsprot.protocol.game.incoming.players.OpPlayer
 import net.rsprot.protocol.game.incoming.players.OpPlayerT
@@ -95,11 +95,11 @@ constructor(
         builder.addListener(WindowStatus::class.java, windowStatus)
         builder.addListener(MoveGameClick::class.java, moveGameClick)
         builder.addListener(MoveMinimapClick::class.java, moveMinimapClick)
-        builder.addListener(OpLoc::class.java, opLoc)
+        builder.addListener(OpLocV2::class.java, opLoc)
         builder.addListener(OpLocT::class.java, opLocT)
         builder.addListener(OpLoc6::class.java, opLoc6)
         builder.addListener(ClientCheat::class.java, clientCheat)
-        builder.addListener(OpNpc::class.java, opNpc)
+        builder.addListener(OpNpcV2::class.java, opNpc)
         builder.addListener(OpNpcT::class.java, opNpcT)
         builder.addListener(OpNpc6::class.java, opNpc6)
         builder.addListener(OpPlayer::class.java, opPlayer)
@@ -109,7 +109,7 @@ constructor(
         builder.addListener(IfScriptTrigger::class.java, ifScriptTrigger)
         builder.addListener(CloseModal::class.java, closeModal)
         builder.addListener(ResumePauseButton::class.java, resumePauseButton)
-        builder.addListener(OpObj::class.java, opObj)
+        builder.addListener(OpObjV2::class.java, opObj)
         builder.addListener(OpObj6::class.java, opObj6)
         builder.addListener(ResumePCountDialog::class.java, resumePCountDialog)
         builder.addListener(ResumePNameDialog::class.java, resumePNameDialog)

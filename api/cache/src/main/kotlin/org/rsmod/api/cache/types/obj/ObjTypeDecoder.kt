@@ -56,6 +56,7 @@ public object ObjTypeDecoder {
                 12 -> cost = data.readInt()
                 13 -> wearpos1 = data.readByte().toInt()
                 14 -> wearpos2 = data.readByte().toInt()
+                15 -> preserveExtraJs5Config(data, code) {}
                 16 -> members = true
                 23 -> {
                     manwear = data.readUnsignedShort()

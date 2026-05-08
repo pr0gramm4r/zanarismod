@@ -18,6 +18,7 @@ import org.rsmod.game.type.varp.VarpType
  * @param clientTables A set of [DbTableType.id] that will be used to filter db tables when packing
  *   db rows into the client-only cache. This is done to respect the
  *   [UnpackedDbTableType.CLIENTSIDE] attribute.
+ * @param wideLocModelIds If `true`, loc model ids are encoded in the widened revision format.
  */
 public class EncoderContext
 private constructor(
@@ -25,17 +26,28 @@ private constructor(
     public val clientParams: Set<Int>,
     public val clientVarps: Set<Int>,
     public val clientTables: Set<Int>,
+    public val wideLocModelIds: Boolean,
 ) {
     public val clientOnly: Boolean
         get() = !encodeFull
 
     public companion object {
-        public fun client(params: Set<Int>, varps: Set<Int>, tables: Set<Int>): EncoderContext {
-            return EncoderContext(encodeFull = false, params, varps, tables)
+        public fun client(
+            params: Set<Int>,
+            varps: Set<Int>,
+            tables: Set<Int>,
+            wideLocModelIds: Boolean = false,
+        ): EncoderContext {
+            return EncoderContext(encodeFull = false, params, varps, tables, wideLocModelIds)
         }
 
-        public fun server(params: Set<Int>, varps: Set<Int>, tables: Set<Int>): EncoderContext {
-            return EncoderContext(encodeFull = true, params, varps, tables)
+        public fun server(
+            params: Set<Int>,
+            varps: Set<Int>,
+            tables: Set<Int>,
+            wideLocModelIds: Boolean = false,
+        ): EncoderContext {
+            return EncoderContext(encodeFull = true, params, varps, tables, wideLocModelIds)
         }
     }
 }

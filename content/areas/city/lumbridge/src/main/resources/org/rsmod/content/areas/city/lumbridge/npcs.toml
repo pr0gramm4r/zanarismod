@@ -1407,42 +1407,6 @@ npc = 'imp'
 coords = '0_50_50_17_26'
 
 [[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '0_50_50_8_34'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '0_50_50_9_4'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '0_50_50_21_22'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '0_50_50_21_38'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '0_50_50_32_31'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '0_50_50_36_17'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '1_50_50_6_18'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '2_50_50_6_19'
-
-[[spawn]]
-npc = 'deadman_guard_lumbridge'
-coords = '2_50_50_28_19'
-
-[[spawn]]
 npc = 'goblin_unarmed_melee_4'
 coords = '0_50_50_2_53'
 
@@ -1751,11 +1715,11 @@ npc = 'cow'
 coords = '0_50_50_58_60'
 
 [[spawn]]
-npc = 'veos_lumbridge'
+npc = 'veos_visible_travel'
 coords = '0_50_50_28_42'
 
 [[spawn]]
-npc = 'cws_doomsayer'
+npc = 'doomsayer_normal'
 coords = '0_50_50_32_23'
 
 [[spawn]]
@@ -1827,11 +1791,11 @@ npc = 'aide_tutor_prayer'
 coords = '0_50_50_43_14'
 
 [[spawn]]
-npc = 'lost_property_merchant_combatty'
+npc = 'lost_property_merchant_model'
 coords = '0_50_50_23_20'
 
 [[spawn]]
-npc = 'lost_property_merchant_standard'
+npc = 'lost_property_merchant_model'
 coords = '0_50_50_30_15'
 
 [[spawn]]
@@ -1851,7 +1815,7 @@ npc = 'lamb1'
 coords = '0_50_50_6_60'
 
 [[spawn]]
-npc = 'peng_multi_larry_lumb'
+npc = 'peng_larry_zoo'
 coords = '0_50_50_12_63'
 
 [[spawn]]
@@ -1939,7 +1903,7 @@ npc = 'aide_tutor_clues'
 coords = '0_50_50_29_36'
 
 [[spawn]]
-npc = 'hundred_aris2'
+npc = 'hundred_aris_base'
 coords = '0_50_50_11_25'
 
 [[spawn]]
@@ -2337,4 +2301,3 @@ coords = '0_50_51_29_16'
 [[spawn]]
 npc = 'duck_update_on_land_drake'
 coords = '0_50_51_28_18'
-

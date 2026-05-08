@@ -37,6 +37,7 @@ internal object SkillGuideEnumBuilder : EnumBuilder() {
             this[guide_components.farming] = 21
             this[guide_components.construction] = 22
             this[guide_components.hunter] = 23
+            this[guide_components.sailing] = 24
         }
 
         build<ComponentType, Int>("skill_guide_section_vars") {

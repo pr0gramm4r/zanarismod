@@ -45,11 +45,16 @@ constructor(
 
     private fun Player.processZoneUpdates() {
         val currZone = ZoneKey.from(coords)
+        if (lastMapBuildComplete == Int.MIN_VALUE) {
+            lastProcessedZone = currZone
+            return
+        }
+
         val visibleZones = visibleZoneKeys
         val prevZone = lastProcessedZone
         val buildArea = buildArea
 
-        if (currZone != prevZone) {
+        if (visibleZones.isEmpty() || currZone != prevZone) {
             // Compute neighbouring zones based on the player's current zone.
             val currZones =
                 currZone.computeVisibleNeighbouringZones().filterWithinBuildArea(buildArea)

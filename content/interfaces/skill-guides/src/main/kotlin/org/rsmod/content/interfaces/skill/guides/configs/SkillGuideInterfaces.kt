@@ -8,7 +8,7 @@ typealias guide_interfaces = SkillGuideInterfaces
 typealias guide_components = SkillGuideComponents
 
 object SkillGuideInterfaces : InterfaceReferences() {
-    val skill_guide = find("skill_guide", 9223372035728683286)
+    val skill_guide_v2 = find("skill_guide_v2")
 }
 
 object SkillGuideComponents : ComponentReferences() {
@@ -35,6 +35,7 @@ object SkillGuideComponents : ComponentReferences() {
     val firemaking = find("stats:firemaking", 9176318748447236919)
     val woodcutting = find("stats:woodcutting", 8272011736892324641)
     val farming = find("stats:farming", 4120100676970717860)
+    val sailing = find("stats:sailing")
 
     val subsection_1 = find("skill_guide:00", 5617794397242844921)
     val subsection_2 = find("skill_guide:01", 4321920680269798703)
@@ -51,5 +52,5 @@ object SkillGuideComponents : ComponentReferences() {
     val subsection_13 = find("skill_guide:12", 8514053867275841921)
     val subsection_14 = find("skill_guide:13", 7218180150302795703)
     val subsection_entry_list = find("skill_guide:icons", 1898164220621361302)
-    val close_button = find("skill_guide:close", 1811048218123348419)
+    val close_button = find("skill_guide_v2:close")
 }

@@ -38,10 +38,18 @@ internal object StyleEnumBuilder : EnumBuilder() {
             styles(WeaponCategory.Thrown, accurateRanged, rapid, longrangeRanged)
             styles(WeaponCategory.Whip, accurate, controlled, defensive)
             styles(WeaponCategory.BladedStaff, accurate, aggressive, defensive)
+            styles(WeaponCategory.StaffSpellblade, accurate, aggressive, defensive)
             styles(WeaponCategory.Banner, accurate, aggressive, aggressive, defensive)
             styles(WeaponCategory.PoweredStaff, accurateMagic, accurateMagic, longrangeMagic)
+            styles(WeaponCategory.ChargeSpear, controlled, aggressive, defensive)
             styles(WeaponCategory.Bludgeon, aggressive, aggressive, aggressive)
             styles(WeaponCategory.Bulwark, accurate, null, null, aggressive)
+            styles(WeaponCategory.PoweredWand, accurateMagic, accurateMagic, longrangeMagic)
+            styles(WeaponCategory.Partisan, accurate, aggressive, aggressive, defensive)
+            styles(WeaponCategory.Tribrid, aggressive, accurateRanged, accurateMagic, null)
+            styles(WeaponCategory.Egg, accurate, aggressive, defensive)
+            styles(WeaponCategory.SailingCannon, accurateRanged, rapid, longrangeRanged)
+            styles(WeaponCategory.MultiMelee, accurate, aggressive, aggressive, defensive)
         }
     }
 

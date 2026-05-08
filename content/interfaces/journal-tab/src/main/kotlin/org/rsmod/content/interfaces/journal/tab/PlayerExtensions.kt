@@ -23,9 +23,19 @@ internal fun Player.openJournalTab(tab: SideJournalTab, eventBus: EventBus) =
     }
 
 internal fun Player.openSummaryTab(eventBus: EventBus) {
+    ifOpenOverlay(interfaces.account_summary_sidepanel, journal_components.tab_container, eventBus)
+    initSummarySidePanel()
     updateSummaryTimePlayed()
     updateSummaryCombatLevel()
-    ifOpenOverlay(interfaces.account_summary_sidepanel, journal_components.tab_container, eventBus)
+}
+
+private fun Player.initSummarySidePanel() {
+    runClientScript(
+        ACCOUNT_SUMMARY_INIT_CLIENTSCRIPT,
+        journal_components.summary_contents.packed,
+        journal_components.summary_click_layer.packed,
+        journal_components.summary_player_name.packed,
+    )
 }
 
 internal fun Player.updateSummaryTimePlayed() {
@@ -46,6 +56,8 @@ internal fun Player.updateSummaryCombatLevel() {
         combatLevel,
     )
 }
+
+private const val ACCOUNT_SUMMARY_INIT_CLIENTSCRIPT = 3174
 
 internal fun Player.openQuestTab(eventBus: EventBus) {
     ifOpenOverlay(interfaces.questlist, journal_components.tab_container, eventBus)

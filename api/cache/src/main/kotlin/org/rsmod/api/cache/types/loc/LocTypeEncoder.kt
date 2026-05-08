@@ -50,7 +50,7 @@ public object LocTypeEncoder {
     public fun encodeJs5(type: UnpackedLocType, data: ByteBuf, ctx: EncoderContext): Unit =
         with(type) {
             if (models.isNotEmpty() && shapes.isNotEmpty()) {
-                val wideModels = models.any { it > UShort.MAX_VALUE.toInt() }
+                val wideModels = ctx.wideLocModelIds || models.any { it > UShort.MAX_VALUE.toInt() }
                 data.writeByte(if (wideModels) 6 else 1)
                 data.writeByte(models.size)
                 for (i in models.indices) {
@@ -69,7 +69,7 @@ public object LocTypeEncoder {
             }
 
             if (models.isNotEmpty() && shapes.isEmpty()) {
-                val wideModels = models.any { it > UShort.MAX_VALUE.toInt() }
+                val wideModels = ctx.wideLocModelIds || models.any { it > UShort.MAX_VALUE.toInt() }
                 data.writeByte(if (wideModels) 7 else 5)
                 data.writeByte(models.size)
                 for (model in models) {

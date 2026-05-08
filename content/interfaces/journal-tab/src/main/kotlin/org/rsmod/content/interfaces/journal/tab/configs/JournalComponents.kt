@@ -10,6 +10,8 @@ object JournalComponents : ComponentReferences() {
     val quest_list = find("side_journal:quest_list", 8263924698808498727)
     val task_list = find("side_journal:task_list", 2317701014815971944)
 
+    val summary_player_name =
+        find("account_summary_sidepanel:summary_player_name", 5968230102800160028)
     val summary_contents = find("account_summary_sidepanel:summary_contents", 2485176660594907617)
     val summary_click_layer =
         find("account_summary_sidepanel:summary_click_layer", 2485176660594907618)

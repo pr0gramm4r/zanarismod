@@ -6,7 +6,7 @@ import org.rsmod.api.player.dialogue.Dialogue
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.righthand
 import org.rsmod.api.player.stat.baseMiningLvl
-import org.rsmod.api.script.advanced.onUnimplementedOpNpc1
+import org.rsmod.api.script.onOpNpc1
 import org.rsmod.content.areas.city.lumbridge.configs.lumbridge_npcs
 import org.rsmod.game.entity.Npc
 import org.rsmod.game.inv.isType
@@ -16,7 +16,7 @@ import org.rsmod.plugin.scripts.ScriptContext
 
 class MiningTutor : PluginScript() {
     override fun ScriptContext.startup() {
-        onUnimplementedOpNpc1(lumbridge_npcs.mining_tutor) { startDialogue(it.npc) }
+        onOpNpc1(lumbridge_npcs.mining_tutor) { startDialogue(it.npc) }
     }
 
     private suspend fun ProtectedAccess.startDialogue(npc: Npc) {
@@ -33,18 +33,21 @@ class MiningTutor : PluginScript() {
 
     private suspend fun Dialogue.lowLevelMenu() {
         val choice =
-            choice3(
+            choice4(
                 "Can you teach me the basics of mining please?",
                 1,
                 "Are there any mining related quests?",
                 2,
                 "Tell me about different rocks and picks.",
                 3,
+                "Goodbye.",
+                4,
             )
         when (choice) {
             1 -> noviceBasics()
             2 -> miningQuests()
             3 -> rocksAndPicksInquiry()
+            4 -> goodbye()
         }
     }
 

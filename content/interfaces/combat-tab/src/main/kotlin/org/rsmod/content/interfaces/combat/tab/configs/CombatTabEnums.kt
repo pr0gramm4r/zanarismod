@@ -37,11 +37,19 @@ object CombatTabEnumBuilder : EnumBuilder() {
             this[WeaponCategory.Thrown] = combat_varbits.last_style_thrown
             this[WeaponCategory.Whip] = combat_varbits.last_style_whip
             this[WeaponCategory.BladedStaff] = combat_varbits.last_style_bladed_staff
+            this[WeaponCategory.StaffSpellblade] = combat_varbits.last_style_bladed_staff
             this[WeaponCategory.Banner] = combat_varbits.last_style_banner
             this[WeaponCategory.GodSword] = combat_varbits.last_style_godsword
             this[WeaponCategory.PoweredStaff] = combat_varbits.last_style_powered_staff
+            this[WeaponCategory.ChargeSpear] = combat_varbits.last_style_polearm
             this[WeaponCategory.Bludgeon] = combat_varbits.last_style_bludgeon
             this[WeaponCategory.Bulwark] = combat_varbits.last_style_bulwark
+            this[WeaponCategory.PoweredWand] = combat_varbits.last_style_powered_staff
+            this[WeaponCategory.Partisan] = combat_varbits.last_style_stab_sword
+            this[WeaponCategory.Tribrid] = combat_varbits.last_style_salamander
+            this[WeaponCategory.Egg] = combat_varbits.last_style_blunt
+            this[WeaponCategory.SailingCannon] = combat_varbits.last_style_crossbow
+            this[WeaponCategory.MultiMelee] = combat_varbits.last_style_slash_sword
         }
     }
 
